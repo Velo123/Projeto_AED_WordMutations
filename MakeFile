@@ -1,0 +1,13 @@
+#Makefile wrdmttns
+CFLAGS  = -Wall -std=c99 -O3 -g
+
+default: all
+
+all: main.o
+	gcc $(CFLAGS) -o wrdmttns main.o
+
+main.o: main.c WordMutations.h
+	gcc  $(CFLAGS) -c main.c
+
+clean:
+	rm -rf *o all
