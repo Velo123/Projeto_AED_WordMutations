@@ -1,17 +1,30 @@
-#include "WordMutations.h"
+#include "scandict.h"
 
 void scandict(char *argv[]){
     FILE *ptr = fopen(argv[1],"r");
-    /*int npalavras=0;
-    char str[5];
-    const char s[2] = " ";
-    char* token;
-    while(fgets(token=strtok(str,s),5,ptr)!=NULL){
-        printf("%s\n",str);
-    }*/
+    char temp;
+    char strlida[10];
+    int cnt=0;
+    int npals=0;
+    while((temp=fgetc(ptr))!=EOF){
+        if(temp>='a' && temp<='z'){ //ler letras validas
+            strlida[cnt]=temp;  //colocar no vetor
+            cnt++;
+        }
+        else if((temp==' ' || temp=='\t' || temp=='\n') && cnt!=0){ //ler fim de palavra
+            strlida[cnt]='\0';  //declarar fim de string no vetor
+            printf("%s\n",strlida);
+            npals++;    //incrementar contador de palavras p/ saber a tamanho de malloc
+            cnt=0;  //ler nova palavra
+        }else if(((temp<'a' && temp>'z') || (temp==' ' || temp=='\t' || temp=='\n')) && cnt<=1){    //descartar carateres nao validos
+            cnt=0; 
+        }else{
+            printf("OUTRO CASO!!\n");
+        }
+    }
+    printf("Nr. de palavras: %d\n",npals);
     fclose(ptr);
 }
-
 
 /*void scandict(char ***dict,int size, int *npalavras2,char *dicio){
     FILE *ptr = fopen(dicio,"r");
