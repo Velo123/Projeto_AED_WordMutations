@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "wordmutations.h": "c"
+        "wordmutations.h": "c",
+        "string.h": "c"
     }
 }

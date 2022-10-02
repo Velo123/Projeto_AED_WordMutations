@@ -1,11 +1,19 @@
 #include "scandict.h"
 
-void scandict(char *argv[]){
+char ***scandict(char *argv[],int* max_size, int* min_size){
     FILE *ptr = fopen(argv[1],"r");
+    if(ptr==NULL){
+        printf("Nao foi possivel abrir o ficheiro");
+        exit(EXIT_FAILURE);
+    }
     char temp;
-    char strlida[10];
-    int cnt=0;
-    int npals=0;
+    char strlida[40];
+    int cnt=0, size=0;
+    int npals[40];
+    for (int i = 0; i < 40; i++)
+    {
+        npals[i]=0;
+    }
     while((temp=fgetc(ptr))!=EOF){
         if(temp>='a' && temp<='z'){ //ler letras validas
             strlida[cnt]=temp;  //colocar no vetor
@@ -13,98 +21,79 @@ void scandict(char *argv[]){
         }
         else if((temp==' ' || temp=='\t' || temp=='\n') && cnt!=0){ //ler fim de palavra
             strlida[cnt]='\0';  //declarar fim de string no vetor
-            printf("%s\n",strlida);
-            npals++;    //incrementar contador de palavras p/ saber a tamanho de malloc
-            cnt=0;  //ler nova palavra
+            size = strlen(strlida);
+            if (size>*max_size)
+            {
+                *max_size=size;
+            }
+            npals[size-2]++;
+            cnt=0;
         }else if(((temp<'a' && temp>'z') || (temp==' ' || temp=='\t' || temp=='\n')) && cnt<=1){    //descartar carateres nao validos
             cnt=0; 
         }else{
-            printf("OUTRO CASO!!\n");
+            cnt=0;
         }
     }
-    printf("Nr. de palavras: %d\n",npals);
+    fseek(ptr,0,SEEK_SET);
+    char ***dict=(char***)malloc((*max_size-1)*sizeof(char**));
+    if(dict==NULL){
+        printf("Impossivel alocar\n");
+        exit(EXIT_FAILURE);
+    }
+    for(int i=0;i<*max_size-1;i++){
+        dict[i]= (char**)malloc((npals[i]+1)*sizeof(char*));   //alocacao do nr de palavras
+        if (dict[i]==NULL)
+        {
+            exit(EXIT_FAILURE);
+            printf("Impossivel alocar para o tamanho %d",i+2);
+        }
+        dict[i][npals[i]]=(char*)malloc(5*sizeof(char));
+        dict[i][npals[i]] = "#EOL";
+    }
+    while((temp=fgetc(ptr))!=EOF){
+        if(temp>='a' && temp<='z'){ //ler letras validas
+            strlida[cnt]=temp;  //colocar no vetor
+            cnt++;
+        }
+        else if((temp==' ' || temp=='\t' || temp=='\n') && cnt>1){ //ler fim de palavra
+            strlida[cnt]='\0';  //declarar fim de string no vetor
+            size = strlen(strlida);
+            cnt=0;
+            npals[size-2]--;
+            dict[size-2][npals[size-2]]=(char*)malloc((strlen(strlida)+1)*sizeof(char));
+            if (dict[size-2][npals[size-2]]==NULL)
+            {
+                exit(EXIT_FAILURE);
+                printf("Impossivel alocar para o tamanho size=%d e npals=%d",size-2,npals[size-2]);
+            }
+            strcpy(dict[size-2][npals[size-2]],strlida);
+        }else if(((temp<'a' && temp>'z') || (temp==' ' || temp=='\t' || temp=='\n')) && cnt<=1){    //descartar carateres nao validos
+            cnt=0; 
+        }else{
+            cnt=0;
+        }
+    }
+    /*for (int i = 0; i < *max_size-1; i++)
+    {
+        for (int j = 0; dict[i][j]!="#EOL"; j++)
+        {
+            printf("s=%d c=%d v=%s\t",i,j,dict[i][j]);
+        }
+    }*/
     fclose(ptr);
+    return dict;
 }
 
-/*void scandict(char ***dict,int size, int *npalavras2,char *dicio){
-    FILE *ptr = fopen(dicio,"r");
-    char str[100];
-    int temp;
-    int npalavras[size-1];
-    for(int i=0;i<size-1;i++){
-        npalavras[i]=0;
-    }
-    char strlida[100];
-    char *strptr;
-    for(int k=0;k<2;k++){               //Percorrer o ficheiro 2 vezes. A primeira para saber quanta memoria alocar e a sa para alocar a memoria e guardar a string do dicionario
-        if(k==0){
-            while(fgets(strlida,100,ptr)!=NULL){    //selecao de ate onde as palavras podem ir
-                if(strstr(strlida," ")!=NULL){
-                    strptr = strtok (strlida, " ");
-                }
-                if(strstr(strlida,"/")!=NULL){
-                    strptr = strtok (strlida, "/");
-                }
-                if(strstr(strlida,"\t")!=NULL){
-                    strptr = strtok (strlida, "\t");
-                }
-                if(strstr(strlida,"\n")!=NULL){
-                    strptr = strtok (strlida, "\n");
-                }
-                strcpy(str,strptr);
-                temp = strlen(str);
-                if(temp>=2 && temp<=size){    //saber se a palavra tem mais de duas letras e menos do que o tamanho do tabuleiro
-                    int aux=0;
-
-                    for(int j=0;j<temp;j++){                //saber se a palavra tem ou nao acentos.
-                        if(str[j]<'a' || str[j]>'z'){
-                            aux++;
-                        }
-                    }
-                    if(aux==0){
-                        npalavras[temp-2]++;
-                    }
-                }
-            }
-            for(int p=0;p<size-1;p++){
-                npalavras2[p]=npalavras[p];
-            }
+void freedict(char*** dict,int* max_size,int* min_size){
+    int aux=0;
+    for (int i = 0; i < *max_size-1; i++)
+    {
+        for (int j = 0; dict[i][j]!="#EOL"; j++,aux++)
+        {
+            free(dict[i][j]);
         }
-        else if(k==1){
-            fseek(ptr,0,SEEK_SET);
-            for(int l=0;l<size-1;l++){
-                dict[l]= (char**)malloc(npalavras2[l]*sizeof(char*));   //alocacao do nr de palavras
-            }
-            while(fgets(strlida,100,ptr)!=NULL){        //saber se a palavra tem ou nao acentos.
-                if(strstr(strlida," ")!=NULL){
-                    strptr = strtok (strlida, " ");
-                }
-                if(strstr(strlida,"/")!=NULL){
-                    strptr = strtok (strlida, "/");
-                }
-                if(strstr(strlida,"\t")!=NULL){
-                    strptr = strtok (strlida, "\t");
-                }
-                if(strstr(strlida,"\n")!=NULL){
-                    strptr = strtok (strlida, "\n");
-                }
-                strcpy(str,strptr);
-                temp = strlen(str);
-                if(temp>=2 && temp<=size){
-                    int aux=0;
-                    for(int j=0;j<temp;j++){            //saber se a palavra tem ou nao acentos.
-                        if(str[j]<'a' || str[j]>'z'){
-                            aux++;
-                        }
-                    }
-                    if(aux==0){         //alocacao do espaco necessario para cada string
-                        npalavras[temp-2]--;
-                        dict[temp-2][npalavras[temp-2]]= (char*)malloc((strlen(str)+1)*sizeof(char));
-                        strcpy(dict[temp-2][npalavras[temp-2]],str);
-                    }
-                }
-            }
-        }
+        //free(dict[i][aux]);
+        free(dict[i]);
     }
-    fclose(ptr);
-}*/
+    free(dict);
+}
