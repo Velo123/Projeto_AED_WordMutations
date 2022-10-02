@@ -1,6 +1,13 @@
-#include<stdio.h>
+
+#ifndef WordMutations
+#define WordMutations
+
 #include<stdlib.h>
+#include<stdio.h>
+#include<string.h>
 
 
-int main(int argc, char *argv[]);
 void scandict(char *argv[]);
+int main(int argc, char *argv[]);
+
+#endif

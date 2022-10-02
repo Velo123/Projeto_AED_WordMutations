@@ -1,12 +1,21 @@
 #include "WordMutations.h"
 
 void scandict(char *argv[]){
-    //FILE *ptr = fopen(argv[1],"r");
-    
-    printf("%s\n",argv[1]);
-    
-    
-    /*char str[100];
+    FILE *ptr = fopen(argv[1],"r");
+    /*int npalavras=0;
+    char str[5];
+    const char s[2] = " ";
+    char* token;
+    while(fgets(token=strtok(str,s),5,ptr)!=NULL){
+        printf("%s\n",str);
+    }*/
+    fclose(ptr);
+}
+
+
+/*void scandict(char ***dict,int size, int *npalavras2,char *dicio){
+    FILE *ptr = fopen(dicio,"r");
+    char str[100];
     int temp;
     int npalavras[size-1];
     for(int i=0;i<size-1;i++){
@@ -83,6 +92,6 @@ void scandict(char *argv[]){
                 }
             }
         }
-    }*/
-    //fclose(ptr);
-}
+    }
+    fclose(ptr);
+}*/

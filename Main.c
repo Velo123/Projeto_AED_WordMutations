@@ -1,4 +1,6 @@
 #include "WordMutations.h"
+void scandict(char *argv[]);
+
 
 int main(int argc, char *argv[]){
 
@@ -7,7 +9,6 @@ int main(int argc, char *argv[]){
         printf("Programa invocado incorretamente");
         return -1;
     }
-    printf("%s\n",argv[2]);
     scandict(argv);
     
     return 0;
