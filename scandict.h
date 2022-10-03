@@ -9,8 +9,10 @@ typedef struct dicio sdict;
 
 
 sdict *scandict(char *argv[]);
-
+char *retwadd(sdict *dict,int tam,int pos);
 void pt(sdict *dict);
 void freedict(sdict *dict);
+int getwpos(sdict *dict,char *pal);
+
 
 #endif

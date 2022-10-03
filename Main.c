@@ -15,12 +15,7 @@ int main(int argc, char *argv[]){
 
     dict=scandict(argv);
 
-    //pt(dict);
-    //printf("Entrar em frees\n");
-
     freedict(dict);
-
-   //printf("Concluido\n");
     
     return 0;
 }

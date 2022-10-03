@@ -6,9 +6,7 @@ struct dicio{
     int max_size;
 };
 
-
 sdict *scandict(char *argv[]){
-    
     sdict *srdict=(sdict*)malloc(sizeof(sdict));
     if(srdict==NULL){
         printf("Impossivel alocar\n");
@@ -99,13 +97,6 @@ sdict *scandict(char *argv[]){
             cnt=0;
         }
     }
-    /*for (int i = 0; i < max_size-1; i++)
-    {
-        for (int j = 0; dict[i][j]!="#EOL"; j++)
-        {
-            printf("s=%d c=%d v=%s\t",i,j,dict[i][j]);
-        }
-    }*/
     fclose(ptr);
     return srdict;
 }
@@ -133,4 +124,30 @@ void pt(sdict *dict){
             printf("%s\n",dict->dict[i][j]);
         }
     }
+}
+
+char *retwadd(sdict *dict,int tam,int pos){
+    if (tam<=dict->max_size && pos<dict->tam[tam-2])
+    {
+        return dict->dict[tam-2][pos];
+    }
+    return NULL;
+}
+
+int getwpos(sdict *dict,char *pal){
+    int size=strlen(pal);
+    if (size<2 || size>dict->max_size)
+    {
+        printf("Não existe essa palavra");
+        return -1;
+    }
+    for (int i = 0; i < dict->tam[size-2]; i++)
+    {
+        if (strcmp(dict->dict[size-2][i],pal)==0)
+        {
+            return i;
+        }
+    }
+    printf("Não existe essa palavra");
+    return -1;
 }
