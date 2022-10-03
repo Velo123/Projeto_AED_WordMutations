@@ -5,7 +5,12 @@
 #include<stdio.h>
 #include<string.h>
 
-char ***scandict(char *argv[],int* max_size, int* min_size);
-void freedict(char*** dict,int* max_size,int* min_size);
+typedef struct dicio sdict;
+
+
+sdict *scandict(char *argv[]);
+
+void pt(sdict *dict);
+void freedict(sdict *dict);
 
 #endif

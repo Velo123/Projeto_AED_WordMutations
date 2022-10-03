@@ -1,7 +1,6 @@
 #include "Main.h"
 
 int main(int argc, char *argv[]){
-    char ***dict;
     int max_size=0, min_size=0;
     if (argc!=3) 
     {
@@ -12,13 +11,16 @@ int main(int argc, char *argv[]){
         exit(EXIT_FAILURE);
     }
 
-    dict=scandict(argv,&max_size,&min_size);
+    sdict *dict;
 
-    printf("Entrar em frees\n");
+    dict=scandict(argv);
 
-    freedict(dict,&max_size,&min_size);
+    //pt(dict);
+    //printf("Entrar em frees\n");
 
-    printf("Concluido\n");
+    freedict(dict);
+
+   //printf("Concluido\n");
     
     return 0;
 }
