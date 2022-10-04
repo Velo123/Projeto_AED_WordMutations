@@ -22,7 +22,6 @@ sdict *scandict(char *argv[]){
     char strlida[40];
     int cnt=0, size=0;
     int npals[40];
-    int max_size=0;
     for (int i = 0; i < 40; i++)
     {
         npals[i]=0;
@@ -35,9 +34,9 @@ sdict *scandict(char *argv[]){
         else if((temp==' ' || temp=='\t' || temp=='\n') && cnt!=0){ //ler fim de palavra
             strlida[cnt]='\0';  //declarar fim de string no vetor
             size = strlen(strlida);
-            if (size>max_size)
+            if (size>srdict->max_size)
             {
-                max_size=size;
+                srdict->max_size=size;
             }
             npals[size-2]++;
             cnt=0;
@@ -48,25 +47,24 @@ sdict *scandict(char *argv[]){
         }
     }
     fseek(ptr,0,SEEK_SET);
-    srdict->max_size=max_size;
-    srdict->tam=(int*)malloc((max_size-1)*sizeof(int));
+    srdict->tam=(int*)malloc((srdict->max_size-1)*sizeof(int));
     
     if(srdict->tam==NULL){
         printf("Impossivel alocar\n");
         exit(EXIT_FAILURE);
     }
-    for (int i = 0; i < max_size-1; i++)
+    for (int i = 0; i < srdict->max_size-1; i++)
     {
         srdict->tam[i]=npals[i];
     }
     
-    srdict->dict=(char***)malloc((max_size-1)*sizeof(char**));
+    srdict->dict=(char***)malloc((srdict->max_size-1)*sizeof(char**));
 
     if(srdict->dict==NULL){
         printf("Impossivel alocar\n");
         exit(EXIT_FAILURE);
     }
-    for(int i=0;i<max_size-1;i++){
+    for(int i=0;i<srdict->max_size-1;i++){
         srdict->dict[i]= (char**)malloc((npals[i])*sizeof(char*));   //alocacao do nr de palavras
         if (srdict->dict[i]==NULL)
         {
@@ -101,8 +99,7 @@ sdict *scandict(char *argv[]){
     return srdict;
 }
 
-void freedict(sdict *dict){
-    int aux=0;
+void sdfree(sdict *dict){
     for (int i = 0; i < dict->max_size-1; i++)
     {
         for (int j = 0; j < dict->tam[i]; j++)
@@ -116,7 +113,7 @@ void freedict(sdict *dict){
     free(dict);
 }
 
-void pt(sdict *dict){
+void sdprintf(sdict *dict){
     for (int i = 0; i < dict->max_size-1; i++)
     {
         for (int j = 0; j < dict->tam[i]; j++)
