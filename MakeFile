@@ -3,11 +3,14 @@ CFLAGS  = -Wall -std=c99 -O3 -g
 
 default: all
 
-all: main.o
-	gcc $(CFLAGS) -o wrdmttns main.o
+all: main.o scandict.o
+	gcc $(CFLAGS) -o wrdmttns main.o scandict.o
 
-main.o: main.c WordMutations.h
+main.o: main.c Main.h
 	gcc  $(CFLAGS) -c main.c
 
+scandict.o: scandict.c scandict.h
+	gcc  $(CFLAGS) -c scandict.c
+	
 clean:
 	rm -rf *o all
