@@ -6,6 +6,7 @@
 #include<string.h>
 #include"scandict.h"
 #include"input.h"
+#include"output.h"
 
 int main(int argc, char *argv[]);
 

@@ -7,10 +7,22 @@ int main(int argc, char *argv[]){
     }
 
     sdict *dict;
+    
+    
+    
 
-    dict=scandict(argv);
+    //dict=scandict(argv);
     //sdprintf(dict);
-    sdfree(dict);
+
+
+    FILE *fp = openfile(argv);
+
+    
+
+
+    //sdfree(dict);
+
+
     
     return 0;
 }

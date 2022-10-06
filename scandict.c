@@ -12,6 +12,7 @@ sdict *scandict(char *argv[]){
         printf("Impossivel alocar\n");
         exit(EXIT_FAILURE);
     }
+    srdict->max_size=0;
     
     FILE *ptr = fopen(argv[1],"r");
     if(ptr==NULL){
