@@ -46,5 +46,9 @@ char* getprobword1(prob* p){
 }
 
 char* getprobword2(prob* p){
-    return p->pal1;
+    return p->pal2;
+}
+
+int getprobtype(prob* p){
+    return p->mod;
 }

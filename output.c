@@ -1,29 +1,17 @@
 #include  "output.h"
 
-struct pout{
-    char *pal1;
-    char *pal2;
-    int vals[2];
-};
-
 FILE *openfile(char *argv[]){
-    char ext[]=".paths";
-    
-    char* fout=(char*)malloc((strlen(argv[2])+7)*sizeof(char));
-    if(fout==NULL){
-        printf("Impossivel alocar\n");
-        exit(EXIT_FAILURE);
-    }
-    fout=argv[2];
-    char* temp=strstr(fout,".pals");
-    fout=strcat(argv[2],temp);
+    char ext[]=".stats";
+    char* fout = argv[2];
+    char* temp = strstr(fout,".pals");
     
     memmove(temp,ext,7);
 
     FILE *fp=fopen(fout,"w+");
-    return fp;
-}
-
-pout* psolution(char* pal1, char* pal2){
+    if(fp==NULL){
+        printf("Nao foi possivel abrir o ficheiro de saida");
+        exit(EXIT_FAILURE);
+    }
     
+    return fp;
 }

@@ -13,6 +13,7 @@ char *retwadd(sdict *dict,int tam,int pos);
 void sdprintf(sdict *dict);
 void sdfree(sdict *dict);
 int getwpos(sdict *dict,char *pal);
+int getsizetotal(sdict *dict,int size);
 
 
 #endif

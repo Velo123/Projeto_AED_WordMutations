@@ -5,10 +5,7 @@
 #include<stdio.h>
 #include<string.h>
 #include"scandict.h"
-#include"input.h"
-#include"output.h"
 
-int fase1();
-
+int fase1(int ptype, char* pal1, char* pal2);
 
 #endif

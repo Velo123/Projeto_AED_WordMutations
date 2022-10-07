@@ -136,7 +136,6 @@ int getwpos(sdict *dict,char *pal){
     int size=strlen(pal);
     if (size<2 || size>dict->max_size)
     {
-        printf("Não existe essa palavra");
         return -1;
     }
     for (int i = 0; i < dict->tam[size-2]; i++)
@@ -146,6 +145,9 @@ int getwpos(sdict *dict,char *pal){
             return i;
         }
     }
-    printf("Não existe essa palavra");
     return -1;
+}
+
+int getsizetotal(sdict *dict,int size){
+    return dict->tam[size];
 }

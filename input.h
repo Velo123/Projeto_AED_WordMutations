@@ -12,7 +12,7 @@ void printprob(prob* p);
 void freeprob(prob* p);
 char* getprobword1(prob* p);
 char* getprobword2(prob* p);
-int* getprobtype(prob* p);
+int getprobtype(prob* p);
 
 #endif
 
