@@ -24,6 +24,6 @@ FILE *openfile(char *argv[]){
     return fp;
 }
 
-pout *searchword(char* pal1,char* pal2){
+pout* psolution(char* pal1, char* pal2){
     
 }
