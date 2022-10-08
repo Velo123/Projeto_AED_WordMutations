@@ -8,8 +8,9 @@ FILE *openfile(char *argv[]){
     memmove(temp,ext,7);
 
     FILE *fp=fopen(fout,"w+");
+    
     if(fp==NULL){
-        printf("Nao foi possivel abrir o ficheiro de saida");
+        //printf("Nao foi possivel abrir o ficheiro de saida");
         exit(EXIT_FAILURE);
     }
     

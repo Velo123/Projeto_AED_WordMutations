@@ -10,7 +10,7 @@ FILE *openinputfile(char *argv[]){
 
     FILE *probptr = fopen(argv[2],"r");
     if(probptr==NULL){
-        printf("Nao foi possivel abrir o ficheiro");
+        //printf("Nao foi possivel abrir o ficheiro");
         exit(EXIT_FAILURE);
     }
 

@@ -9,14 +9,14 @@ struct dicio{
 sdict *scandict(char *argv[]){
     sdict *srdict=(sdict*)malloc(sizeof(sdict));
     if(srdict==NULL){
-        printf("Impossivel alocar\n");
+        //printf("Impossivel alocar\n");
         exit(EXIT_FAILURE);
     }
     srdict->max_size=0;
     
     FILE *ptr = fopen(argv[1],"r");
     if(ptr==NULL){
-        printf("Nao foi possivel abrir o ficheiro");
+        //printf("Nao foi possivel abrir o ficheiro");
         exit(EXIT_FAILURE);
     }
     char temp;
@@ -51,7 +51,7 @@ sdict *scandict(char *argv[]){
     srdict->tam=(int*)malloc((srdict->max_size-1)*sizeof(int));
     
     if(srdict->tam==NULL){
-        printf("Impossivel alocar\n");
+        //printf("Impossivel alocar\n");
         exit(EXIT_FAILURE);
     }
     for (int i = 0; i < srdict->max_size-1; i++)
@@ -62,7 +62,7 @@ sdict *scandict(char *argv[]){
     srdict->dict=(char***)malloc((srdict->max_size-1)*sizeof(char**));
 
     if(srdict->dict==NULL){
-        printf("Impossivel alocar\n");
+        //printf("Impossivel alocar\n");
         exit(EXIT_FAILURE);
     }
     for(int i=0;i<srdict->max_size-1;i++){
@@ -70,7 +70,7 @@ sdict *scandict(char *argv[]){
         if (srdict->dict[i]==NULL)
         {
             exit(EXIT_FAILURE);
-            printf("Impossivel alocar para o tamanho %d",i+2);
+            //printf("Impossivel alocar para o tamanho %d",i+2);
         }
     }
     while((temp=fgetc(ptr))!=EOF){
@@ -87,7 +87,7 @@ sdict *scandict(char *argv[]){
             if (srdict->dict[size-2][npals[size-2]]==NULL)
             {
                 exit(EXIT_FAILURE);
-                printf("Impossivel alocar para o tamanho size=%d e npals=%d",size-2,npals[size-2]);
+                //printf("Impossivel alocar para o tamanho size=%d e npals=%d",size-2,npals[size-2]);
             }
             strcpy(srdict->dict[size-2][npals[size-2]],strlida);
         }else if(((temp<'a' && temp>'z') || (temp==' ' || temp=='\t' || temp=='\n')) && cnt<=1){    //descartar carateres nao validos
@@ -150,4 +150,20 @@ int getwpos(sdict *dict,char *pal){
 
 int getsizetotal(sdict *dict,int size){
     return dict->tam[size];
+}
+
+void ordenardict(sdict* dict){
+    for (int i = 0; i < dict->max_size-2; i++)
+    {
+        insertion(dict->dict[i],0,dict->tam[i]-1);
+        //quicksort(dict->dict[i],0,dict->tam[i]-1);
+    }
+}
+
+char* getword(sdict* dict,int s,int p){
+    return dict->dict[s][p];
+}
+
+int getmaxsize(sdict* dict){
+    return dict->max_size;
 }

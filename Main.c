@@ -2,7 +2,7 @@
 
 int main(int argc, char *argv[]){
     if(argc!=3 || strstr(argv[1],".dict")==NULL || strstr(argv[2],".pals")==NULL){
-        printf("Programa invocado incorretamente");
+        //printf("Programa invocado incorretamente");
         exit(EXIT_FAILURE);
     }
 
@@ -10,11 +10,15 @@ int main(int argc, char *argv[]){
     FILE *ifp = openinputfile(argv);
     FILE *ofp = openfile(argv);
     prob *p;
-    
+    ordenardict(dict);
+    sdprintf(dict);
     while (!feof(ifp))
     {
         p=rprob(ifp);
-        if (getprobtype(p)==1)
+        if(p==NULL){
+            continue;
+        }
+        else if (getprobtype(p)==1)
         {
             fprintf(ofp,"%s %d\n",getprobword1(p),getsizetotal(dict,strlen(getprobword1(p))-2));
         }
@@ -24,6 +28,7 @@ int main(int argc, char *argv[]){
         }
         freeprob(p);
     }
+    
     fclose(ifp);
     fclose(ofp);
     sdfree(dict);

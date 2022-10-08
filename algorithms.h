@@ -4,8 +4,9 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include<string.h>
-#include"scandict.h"
 
-int fase1(int ptype, char* pal1, char* pal2);
+void insertion(char** a, int l, int r);
+void quicksort(char** a, int l, int r);
+int partition(char** a, int l, int r);
 
 #endif

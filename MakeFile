@@ -3,8 +3,8 @@ CFLAGS  = -Wall -std=c99 -O3 -g
 
 default: all
 
-all: main.o scandict.o output.o input.o
-	gcc $(CFLAGS) -o wrdmttns main.o scandict.o output.o input.o
+all: main.o scandict.o output.o input.o algorithms.o
+	gcc $(CFLAGS) -o wrdmttns main.o scandict.o output.o input.o algorithms.o
 
 main.o: main.c Main.h
 	gcc  $(CFLAGS) -c main.c
@@ -17,6 +17,9 @@ output.o: output.c output.h
 
 input.o: input.c input.h
 	gcc  $(CFLAGS) -c input.c
+
+input.o: algorithms.c algorithms.h
+	gcc  $(CFLAGS) -c algorithms.c
 	
 clean:
 	rm -rf *o all
