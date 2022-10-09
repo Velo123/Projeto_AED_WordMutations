@@ -9,60 +9,58 @@ struct dicio{
 sdict *scandict(char *argv[]){
     sdict *srdict=(sdict*)malloc(sizeof(sdict));
     if(srdict==NULL){
-        //printf("Impossivel alocar\n");
         exit(EXIT_FAILURE);
     }
     srdict->max_size=0;
     
     FILE *ptr = fopen(argv[1],"r");
     if(ptr==NULL){
-        //printf("Nao foi possivel abrir o ficheiro");
         exit(EXIT_FAILURE);
     }
     char temp;
-    char strlida[40];
+    char strlida[101];
     int cnt=0, size=0;
-    int npals[40];
-    for (int i = 0; i < 40; i++)
+    int npals[101];
+    for (int i = 0; i < 101; i++)
     {
         npals[i]=0;
     }
     while((temp=fgetc(ptr))!=EOF){
-        if(temp>='a' && temp<='z'){ //ler letras validas
+        if(temp>='a' && temp<='z'){ //ler letras validas    
             strlida[cnt]=temp;  //colocar no vetor
             cnt++;
         }
-        else if((temp==' ' || temp=='\t' || temp=='\n') && cnt!=0){ //ler fim de palavra
-            strlida[cnt]='\0';  //declarar fim de string no vetor
-            size = strlen(strlida);
-            if (size>srdict->max_size)
+        else if(cnt>1 && (temp==' ' || temp=='\t' || temp=='\n')){ //ler fim de palavra
+            strlida[cnt]='\0';
+            cnt=0;
+            size=strlen(strlida);
+            if (size>=srdict->max_size)
             {
                 srdict->max_size=size;
             }
             npals[size-2]++;
-            cnt=0;
-        }else if(((temp<'a' && temp>'z') || (temp==' ' || temp=='\t' || temp=='\n')) && cnt<=1){    //descartar carateres nao validos
+        }
+        else if(cnt<=1 && ((temp<'a' && temp>'z') || temp==' ' || temp=='\t' || temp=='\n')){    //descartar carateres nao validos
             cnt=0; 
-        }else{
-            cnt=0;
         }
     }
+    if (srdict->max_size==0)   
+    {
+        free(srdict);
+        fclose(ptr);
+        return NULL;
+    }
     fseek(ptr,0,SEEK_SET);
-    srdict->tam=(int*)malloc((srdict->max_size-1)*sizeof(int));
-    
+    srdict->tam=(int*)calloc(srdict->max_size-1,sizeof(int));
     if(srdict->tam==NULL){
-        //printf("Impossivel alocar\n");
         exit(EXIT_FAILURE);
     }
     for (int i = 0; i < srdict->max_size-1; i++)
     {
         srdict->tam[i]=npals[i];
     }
-    
     srdict->dict=(char***)malloc((srdict->max_size-1)*sizeof(char**));
-
     if(srdict->dict==NULL){
-        //printf("Impossivel alocar\n");
         exit(EXIT_FAILURE);
     }
     for(int i=0;i<srdict->max_size-1;i++){
@@ -70,7 +68,6 @@ sdict *scandict(char *argv[]){
         if (srdict->dict[i]==NULL)
         {
             exit(EXIT_FAILURE);
-            //printf("Impossivel alocar para o tamanho %d",i+2);
         }
     }
     while((temp=fgetc(ptr))!=EOF){
@@ -87,13 +84,10 @@ sdict *scandict(char *argv[]){
             if (srdict->dict[size-2][npals[size-2]]==NULL)
             {
                 exit(EXIT_FAILURE);
-                //printf("Impossivel alocar para o tamanho size=%d e npals=%d",size-2,npals[size-2]);
             }
             strcpy(srdict->dict[size-2][npals[size-2]],strlida);
         }else if(((temp<'a' && temp>'z') || (temp==' ' || temp=='\t' || temp=='\n')) && cnt<=1){    //descartar carateres nao validos
             cnt=0; 
-        }else{
-            cnt=0;
         }
     }
     fclose(ptr);
@@ -138,29 +132,48 @@ int getwpos(sdict *dict,char *pal){
     {
         return -1;
     }
-    for (int i = 0; i < dict->tam[size-2]; i++)
+    int l=0;
+    int r=dict->tam[size-2]-1;
+    while (l<=r)   
     {
-        if (strcmp(dict->dict[size-2][i],pal)==0)
+        int m=(l+r)/2;
+        if (strcmp(dict->dict[size-2][m],pal)>0)
         {
-            return i;
+            r=m-1;
+        }
+        else if (strcmp(dict->dict[size-2][m],pal)<0)
+        {
+            l=m+1;
+        }
+        else
+        {
+            return m;
         }
     }
     return -1;
 }
 
+
 int getsizetotal(sdict *dict,int size){
+    if (size>=dict->max_size-1)
+    {
+        return -1;
+    }
     return dict->tam[size];
 }
 
 void ordenardict(sdict* dict){
-    for (int i = 0; i < dict->max_size-2; i++)
+    for (int i = 0; i < dict->max_size-1; i++)
     {
-        insertion(dict->dict[i],0,dict->tam[i]-1);
-        //quicksort(dict->dict[i],0,dict->tam[i]-1);
+        quicksort(dict->dict[i],0,dict->tam[i]-1);
     }
 }
 
 char* getword(sdict* dict,int s,int p){
+    if (s>=dict->max_size-1 || p>=dict->tam[s])
+    {
+        return NULL;
+    }
     return dict->dict[s][p];
 }
 

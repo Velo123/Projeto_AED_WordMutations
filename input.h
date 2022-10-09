@@ -5,8 +5,14 @@
 #include<stdio.h>
 #include<string.h>
 
-typedef struct problem prob;
-prob *rprob(FILE *probptr);
+typedef struct problem{
+    char pal1[101];
+    char pal2[101];
+    int mod;
+}prob;
+
+
+void rprob(FILE *probptr,prob *p);
 FILE *openinputfile(char *argv[]);
 void printprob(prob* p);
 void freeprob(prob* p);

@@ -2,33 +2,34 @@
 
 int main(int argc, char *argv[]){
     if(argc!=3 || strstr(argv[1],".dict")==NULL || strstr(argv[2],".pals")==NULL){
-        //printf("Programa invocado incorretamente");
+        exit(EXIT_FAILURE);
+    }
+    sdict *dict = scandict(argv);;
+    if (dict==NULL)
+    {
         exit(EXIT_FAILURE);
     }
 
-    sdict *dict = scandict(argv);;
     FILE *ifp = openinputfile(argv);
     FILE *ofp = openfile(argv);
-    prob *p;
     ordenardict(dict);
-    sdprintf(dict);
+    prob p;
     while (!feof(ifp))
     {
-        p=rprob(ifp);
-        if(p==NULL){
-            continue;
-        }
-        else if (getprobtype(p)==1)
+        rprob(ifp,&p);
+        if (p.mod==1)
         {
-            fprintf(ofp,"%s %d\n",getprobword1(p),getsizetotal(dict,strlen(getprobword1(p))-2));
+            fprintf(ofp,"%s %d\n\n",p.pal1,getsizetotal(dict,strlen(p.pal1)-2));
         }
-        else if (getprobtype(p)==2)
-        {   
-            fprintf(ofp,"%s %d\n%s %d\n\n",getprobword1(p),getwpos(dict,getprobword1(p)),getprobword2(p),getwpos(dict,getprobword2(p)));
+        else if(p.mod==2)
+        {
+            fprintf(ofp,"%s %d\n%s %d\n\n",p.pal1,getwpos(dict,p.pal1),p.pal2,getwpos(dict,p.pal2));
         }
-        freeprob(p);
+        else
+        {
+            fprintf(ofp,"%s %s %d\n",p.pal1,p.pal2,p.mod);
+        }
     }
-    
     fclose(ifp);
     fclose(ofp);
     sdfree(dict);

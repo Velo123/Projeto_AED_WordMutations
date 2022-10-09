@@ -12,27 +12,88 @@ void insertion(char** a, int l, int r)
             compexch (a[j-1], a[j]);
         }
     }
+    return;
 }
 
 void quicksort(char** a, int l, int r)
 {
     int i;
-    if (r <= l){
+    if (r<=l){
         return;
     }
     i = partition(a, l, r);
-    quicksort(a, l, i-1);
-    quicksort(a, i+1, r);
+    if(r-l<=15)
+    {
+        insertion(a,l,r);
+    }
+    else if (i-l<r-i)
+    {
+        quicksort(a, l, i-1);
+        quicksort(a, i+1, r);
+    }
+    else
+    {
+        quicksort(a, i+1, r);
+        quicksort(a, l, i-1);
+    }
     return;
 }
+
+char* med3(char** p,int l,int r){
+    char* a=p[l];
+    char* b=p[(l+r)/2];
+    char* c=p[r];
+    if (strcmp(a,b)<0 && strcmp(a,c)<0)
+    {
+        if (strcmp(b,c)<0)
+        {
+            return b;
+            
+        }
+        else
+        {
+            return c;
+        }
+    }
+    else if (strcmp(b,a)<0 && strcmp(b,c)<0)
+    {
+        if (strcmp(a,c)<0)
+        {
+            return a;
+            
+        }
+        else
+        {
+            return c;
+            
+        }
+    }
+    else if (strcmp(b,a)<0 && strcmp(b,c)<0)
+    {
+        if (strcmp(a,b)<0)
+        {
+            return a;
+            
+        }
+        else
+        {
+            return b;
+            
+        }
+    }
+    return c;
+}
+
 
 int partition(char** a, int l, int r)
 {
     int i, j;
     char* v;
-    v = a[r]; i = l-1; j = r;
+    v = a[r];
+    //v = med3(a,l,r);
+    i = l-1; j = r;
     for (;;) {
-        while (less(a[++i], v)) ;
+        while (less(a[++i], v));
         while (less(v, a[--j]))
         if (j == l) break;
         if (i >= j) break;
@@ -41,25 +102,3 @@ int partition(char** a, int l, int r)
     exch(a[i], a[r]);
     return i;
 }
-
-/*int partition(char** a, int l, int r){
-    int tempmaior=0;
-    int tempmenor=0;
-    for (int i = r; i >= l; i--)
-    {
-        if(strcmp(a[r],a[i])<0){
-            tempmaior=i;
-            break;
-        }
-    }
-    for (int i = 0; i < r; i++)
-    {
-        if(strcmp(a[r],a[i])>0){
-            tempmenor=i;
-            break;
-        }
-    }
-    
-}*/
-
-
