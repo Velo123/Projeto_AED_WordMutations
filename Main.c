@@ -31,7 +31,11 @@ int main(int argc, char *argv[]){
     while (!feof(ifp))
     {
         rprob(ifp,&p);
-        if (p.mod==1)
+        if (strlen(p.pal1)!=strlen(p.pal2))
+        {
+            fprintf(ofp,"%s %s %d\n\n",p.pal1,p.pal2,p.mod);
+        }
+        else if (p.mod==1)
         {
             if((t1=getwpos(dict,p.pal1))==-1){
                 fprintf(ofp,"%s %s %d\n\n",p.pal1,p.pal2,p.mod);
@@ -51,7 +55,7 @@ int main(int argc, char *argv[]){
         }
         else
         {
-            fprintf(ofp,"%s %s %d\n\n",p.pal1,p.pal2,p.mod);
+            fprintf(ofp,"%s %s %d\n\n",p.pal1,p.pal2,p.mod);    
         }
     }
     fclose(ifp);
