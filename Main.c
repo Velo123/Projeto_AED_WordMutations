@@ -1,4 +1,4 @@
-#include "Main.h"
+#include "main.h"
 
 int main(int argc, char *argv[]){
     if(argc!=3 || strstr(argv[1],".dict")==NULL || strstr(argv[2],".pals")==NULL){
@@ -10,9 +10,22 @@ int main(int argc, char *argv[]){
         exit(EXIT_FAILURE);
     }
 
-    FILE *ifp = openinputfile(argv);
-    FILE *ofp = openfile(argv);
     ordenardict(dict);
+
+
+    FILE *ifp = fopen(argv[2],"r");
+    if(ifp==NULL){
+        sdfree(dict);
+        exit(EXIT_FAILURE);
+    }
+
+    FILE *ofp = openfile(argv);
+    if(ofp==NULL){
+        sdfree(dict);
+        fclose(ifp);
+        exit(EXIT_FAILURE);
+    }
+    
     prob p;
     while (!feof(ifp))
     {

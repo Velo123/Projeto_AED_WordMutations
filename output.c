@@ -9,10 +9,6 @@ FILE *openfile(char *argv[]){
 
     FILE *fp=fopen(fout,"w+");
     
-    if(fp==NULL){
-        exit(EXIT_FAILURE);
-    }
-    
     return fp;
 }
 

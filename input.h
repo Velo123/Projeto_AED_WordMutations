@@ -13,7 +13,6 @@ typedef struct problem{
 
 
 void rprob(FILE *probptr,prob *p);
-FILE *openinputfile(char *argv[]);
 void printprob(prob* p);
 void freeprob(prob* p);
 char* getprobword1(prob* p);

@@ -12,9 +12,9 @@ sdict *scandict(char *argv[]){
         exit(EXIT_FAILURE);
     }
     srdict->max_size=0;
-    
     FILE *ptr = fopen(argv[1],"r");
     if(ptr==NULL){
+        free(srdict);
         exit(EXIT_FAILURE);
     }
     char temp;
@@ -25,8 +25,9 @@ sdict *scandict(char *argv[]){
     {
         npals[i]=0;
     }
-    while((temp=fgetc(ptr))!=EOF){
-        if(temp>='a' && temp<='z'){ //ler letras validas    
+    do{
+        temp=fgetc(ptr);
+        if((temp>='a' && temp<='z') || (temp>='A' && temp<='Z')){ //ler letras validas    
             strlida[cnt]=temp;  //colocar no vetor
             cnt++;
         }
@@ -40,10 +41,11 @@ sdict *scandict(char *argv[]){
             }
             npals[size-2]++;
         }
-        else if(cnt<=1 && ((temp<'a' && temp>'z') || temp==' ' || temp=='\t' || temp=='\n')){    //descartar carateres nao validos
+        else if(cnt<=1 && ((temp<'a' && temp>'z') || temp==' ' || temp=='\t' || temp=='\n')){    //descartar carateres nao validos      
             cnt=0; 
         }
-    }
+    }while(!feof(ptr));
+
     if (srdict->max_size==0)   
     {
         free(srdict);
@@ -53,6 +55,8 @@ sdict *scandict(char *argv[]){
     fseek(ptr,0,SEEK_SET);
     srdict->tam=(int*)calloc(srdict->max_size-1,sizeof(int));
     if(srdict->tam==NULL){
+        free(srdict);
+        fclose(ptr);
         exit(EXIT_FAILURE);
     }
     for (int i = 0; i < srdict->max_size-1; i++)
@@ -61,21 +65,29 @@ sdict *scandict(char *argv[]){
     }
     srdict->dict=(char***)malloc((srdict->max_size-1)*sizeof(char**));
     if(srdict->dict==NULL){
+        free(srdict->tam);
+        free(srdict);
+        fclose(ptr);
         exit(EXIT_FAILURE);
     }
     for(int i=0;i<srdict->max_size-1;i++){
         srdict->dict[i]= (char**)malloc((npals[i])*sizeof(char*));   //alocacao do nr de palavras
         if (srdict->dict[i]==NULL)
         {
+            free(srdict->dict);
+            free(srdict->tam);
+            free(srdict);
+            fclose(ptr);
             exit(EXIT_FAILURE);
         }
     }
-    while((temp=fgetc(ptr))!=EOF){
-        if(temp>='a' && temp<='z'){ //ler letras validas
+    do{
+        temp=fgetc(ptr);
+        if((temp>='a' && temp<='z') || (temp>='A' && temp<='Z')){ //ler letras validas
             strlida[cnt]=temp;  //colocar no vetor
             cnt++;
         }
-        else if((temp==' ' || temp=='\t' || temp=='\n') && cnt>1){ //ler fim de palavra
+        else if(cnt>1 && (temp==' ' || temp=='\t' || temp=='\n')){ //ler fim de palavra
             strlida[cnt]='\0';  //declarar fim de string no vetor
             size = strlen(strlida);
             cnt=0;
@@ -83,13 +95,22 @@ sdict *scandict(char *argv[]){
             srdict->dict[size-2][npals[size-2]]=(char*)malloc((strlen(strlida)+1)*sizeof(char));
             if (srdict->dict[size-2][npals[size-2]]==NULL)
             {
+                for (int i = 0; i < srdict->max_size-1; i++)
+                {
+                    free(srdict->dict[i]);
+                }
+                free(srdict->dict);
+                free(srdict->tam);
+                free(srdict);
+                fclose(ptr);
                 exit(EXIT_FAILURE);
             }
             strcpy(srdict->dict[size-2][npals[size-2]],strlida);
-        }else if(((temp<'a' && temp>'z') || (temp==' ' || temp=='\t' || temp=='\n')) && cnt<=1){    //descartar carateres nao validos
+        }
+        else if(cnt<=1 && ((temp<'a' && temp>'z') || temp==' ' || temp=='\t' || temp=='\n')){    //descartar carateres nao validos
             cnt=0; 
         }
-    }
+    }while(!feof(ptr));
     fclose(ptr);
     return srdict;
 }

@@ -1,15 +1,5 @@
 #include "input.h"
 
-FILE *openinputfile(char *argv[]){
-
-    FILE *probptr = fopen(argv[2],"r");
-    if(probptr==NULL){
-        exit(EXIT_FAILURE);
-    }
-
-    return probptr;
-}
-
 void rprob(FILE *probptr,prob *p){
     char pal1[100],pal2[100];
     if(fscanf(probptr,"%s %s %d\n",pal1,pal2,&p->mod)!=3){
