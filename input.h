@@ -4,21 +4,33 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include<string.h>
+#include "scandict.h"
+
+typedef struct failproblem{
+    char* pal1;
+    char* pal2;
+    int mod;
+}pfail;
 
 typedef struct problem{
-    char pal1[101];
-    char pal2[101];
+    int pal1;
+    int pal2;
     int mod;
+    int s;
 }prob;
 
+typedef struct probdata{
+    int** nrpsize;
+    int* totpsize;
+    int* maxmut;
+    int maxwsize;
+    int totprobs;
+    pfail* fv;
+    prob* file;
+}probdata;
 
-void rprob(FILE *probptr,prob *p);
-void printprob(prob* p);
-void freeprob(prob* p);
-char* getprobword1(prob* p);
-char* getprobword2(prob* p);
-int getprobtype(prob* p);
+probdata* scinput(FILE *probptr,sdict *dict);
+void printprob(probdata* d,sdict *dict);
+void freedata(probdata* d);
 
 #endif
-
-

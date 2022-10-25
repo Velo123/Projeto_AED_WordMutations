@@ -9,18 +9,5 @@ FILE *openfile(char *argv[]){
     strcat(fout,".stats");
     FILE *fp=fopen(fout,"w");
     free(fout);
-        
     return fp;
-}
-
-void deletef(char* argv[]){
-    char ext[]=".stats";
-    char* fout = argv[2];
-    char* temp = strstr(fout,".pals");
-    
-    memmove(temp,ext,7);
-
-    remove(fout);
-
-    return;
 }

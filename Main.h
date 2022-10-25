@@ -7,9 +7,9 @@
 #include"scandict.h"
 #include"input.h"
 #include"output.h"
-
+#include"graphf.h"
 
 int main(int argc, char *argv[]);
-
+int verifdif(char* w1, char* w2);
 
 #endif

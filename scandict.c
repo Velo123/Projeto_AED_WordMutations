@@ -20,11 +20,7 @@ sdict *scandict(char *argv[]){
     char temp;
     char strlida[101];
     int cnt=0, size=0;
-    int npals[101];
-    for (int i = 0; i < 101; i++)
-    {
-        npals[i]=0;
-    }
+    int npals[101]={0};
     do{
         temp=fgetc(ptr);
         if((temp>='a' && temp<='z') || (temp>='A' && temp<='Z')){ //ler letras validas    

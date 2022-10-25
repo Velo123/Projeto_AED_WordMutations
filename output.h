@@ -7,6 +7,5 @@
 
 typedef struct pout pout;
 FILE *openfile(char *argv[]);
-void deletef(char* argv[]);
 
 #endif

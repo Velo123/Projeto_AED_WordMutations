@@ -1,17 +1,12 @@
 {
-    "version": "0.2.0",
     "configurations": [
-    
-
         {
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/wrdmttns",
-            "args": [
-                "/mnt/d/documentos/fac/2ano/aed/aux_aed/portugues04-04-sl.dict",
-                "/mnt/d/documentos/fac/2ano/aed/aux_aed/simple01.pals"
-            ],
+            "args": ["/mnt/d/Documentos/Fac/2Ano/AED/aux_aed/portugues.dict",
+            "/mnt/d/Documentos/Fac/2Ano/AED/aux_aed/mix_01.pals"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
@@ -24,40 +19,13 @@
                     "ignoreFailures": true
                 },
                 {
-                    "description": "Set Disassembly Flavor to Intel",
+                    "description":  "Set Disassembly Flavor to Intel",
                     "text": "-gdb-set disassembly-flavor intel",
                     "ignoreFailures": true
                 }
             ]
-        },
-        {
-            "name": "C/C++: gcc-9 build and debug active file",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/wrdmttns",
-            "args": [
-                "/mnt/d/documentos/fac/2ano/aed/aux_aed/portugues04-04-sl.dict",
-                "/mnt/d/documentos/fac/2ano/aed/aux_aed/simple01.pals"
-            ],
-            "stopAtEntry": false,
-            "cwd": "${fileDirname}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                },
-                {
-                    "description": "Set Disassembly Flavor to Intel",
-                    "text": "-gdb-set disassembly-flavor intel",
-                    "ignoreFailures": true
-                }
-            ],
-            "preLaunchTask": "C/C++: gcc-9 build active file",
-            "miDebuggerPath": "/usr/bin/gdb"
         }
+
+    
     ]
 }

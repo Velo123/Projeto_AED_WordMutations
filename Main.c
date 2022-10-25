@@ -4,7 +4,7 @@ int main(int argc, char *argv[]){
     if(argc!=3 || strstr(argv[1],".dict")==NULL || strstr(argv[2],".pals")==NULL){
         exit(EXIT_FAILURE);
     }
-    sdict *dict = scandict(argv);;
+    sdict *dict = scandict(argv);
     if (dict==NULL)
     {
         exit(EXIT_FAILURE);
@@ -24,42 +24,62 @@ int main(int argc, char *argv[]){
         fclose(ifp);
         exit(EXIT_FAILURE);
     }
-    
-    int t1=0, t2=0;
 
-    prob p;
-    while (!feof(ifp))
+    probdata* d=scinput(ifp,dict);
+    for (int i = 0; i < d->maxwsize-1; i++)
     {
-        rprob(ifp,&p);
-        if (strlen(p.pal1)!=strlen(p.pal2))
+        if (d->totpsize[i]==0)
         {
-            fprintf(ofp,"%s %s %d\n\n",p.pal1,p.pal2,p.mod);
+            continue;
         }
-        else if (p.mod==1)
+        int st=getsizetotal(dict,i);
+        edge** g=creategraph(st);
+        for (int cgf = 0; cgf < st; cgf++)
         {
-            if((t1=getwpos(dict,p.pal1))==-1){
-                fprintf(ofp,"%s %s %d\n\n",p.pal1,p.pal2,p.mod);
-            }
-            else{   
-                fprintf(ofp,"%s %d\n\n",p.pal1,getsizetotal(dict,strlen(p.pal1)-2));
-            }
-        }
-        else if(p.mod==2)
-        {
-            if(((t1=getwpos(dict,p.pal1))==-1) || ((t2=getwpos(dict,p.pal2))==-1)){
-                fprintf(ofp,"%s %s %d\n\n",p.pal1,p.pal2,p.mod);
-            }
-            else{   
-                fprintf(ofp,"%s %d\n%s %d\n\n",p.pal1,t1,p.pal2,t2);
+            for (int cgd = 0; cgd < st; cgd++)
+            {
+                char* w1=retwadd(dict,i+2,cgf);
+                char* w2=retwadd(dict,i+2,cgd);
+                int difs=verifdif(w1,w2);
+                if (difs<=d->maxmut[i] && difs>0)
+                {
+                    addedge(g,cgf,difs,cgd);
+                }
             }
         }
-        else
+        
+        /*for (int k = 0; k < st; k++)
         {
-            fprintf(ofp,"%s %s %d\n\n",p.pal1,p.pal2,p.mod);    
-        }
+            edge* aux=getgraphhead(g,k);
+            printf("V%d= ",k);
+
+            while (aux!=NULL)
+            {
+                printf(" %d:%d ",getv(aux),getw(aux));
+                aux=getgraphnext(aux);
+            }
+            printf("\n");
+        }*/
+        freegraph(g,st);
     }
+    freedata(d);
     fclose(ifp);
     fclose(ofp);
     sdfree(dict);
     return 0;
+}
+
+int verifdif(char* w1, char* w2){
+    int dif=0;
+    int s=strlen(w1);
+    
+    for (int i = 0; i < s; i++)
+    {
+        
+        if (w1[i]!=w2[i])
+        {
+            dif++;
+        }
+    }
+    return dif;
 }

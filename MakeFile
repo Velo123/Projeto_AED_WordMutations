@@ -1,10 +1,10 @@
 #Makefile wrdmttns
-CFLAGS  = -Wall -std=c99 -O3
+CFLAGS  = -Wall -std=c99 -O3 -g
 
 default: all
 
-all: main.o scandict.o output.o input.o algorithms.o
-	gcc $(CFLAGS) -o wrdmttns main.o scandict.o output.o input.o algorithms.o
+all: main.o scandict.o output.o input.o algorithms.o graphf.o
+	gcc $(CFLAGS) -o wrdmttns main.o scandict.o output.o input.o algorithms.o graphf.o
 
 main.o: main.c main.h
 	gcc  $(CFLAGS) -c main.c
@@ -20,6 +20,9 @@ input.o: input.c input.h
 
 algorithms.o: algorithms.c algorithms.h
 	gcc  $(CFLAGS) -c algorithms.c
+
+graphf.o: graphf.c graphf.h
+	gcc  $(CFLAGS) -c graphf.c
 	
 clean:
 	rm -rf *o all
