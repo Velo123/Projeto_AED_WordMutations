@@ -32,9 +32,12 @@ probdata* scinput(FILE *probptr,sdict *dict){
                         dif++;
                     }
                 }    
-                if(dif>mut && mut>maxmut[s1-2])
+                if(dif>=mut && mut>maxmut[s1-2])
                 {
                     maxmut[s1-2]=mut;
+                }
+                else if(dif<mut && mut>maxmut[s1-2]){
+                    maxmut[s1-2]=dif;
                 }
             }
         }
