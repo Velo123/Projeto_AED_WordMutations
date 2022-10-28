@@ -36,26 +36,26 @@ int main(int argc, char *argv[]){
         edge** g=creategraph(st);
         for (int cgf = 0; cgf < st; cgf++)
         {
-            for (int cgd = 0; cgd < st; cgd++)
+            char* w1=retwadd(dict,i+2,cgf);
+            for (int cgd = cgf; cgd < st; cgd++)
             {
-                char* w1=retwadd(dict,i+2,cgf);
                 char* w2=retwadd(dict,i+2,cgd);
                 int difs=verifdif(w1,w2);
                 if (difs<=d->maxmut[i] && difs>0)
                 {
                     addedge(g,cgf,difs,cgd);
+                    addedge(g,cgd,difs,cgf);
                 }
             }
         }
-        
         /*for (int k = 0; k < st; k++)
         {
             edge* aux=getgraphhead(g,k);
-            printf("V%d= ",k);
+            printf("V%s= ",retwadd(dict,i+2,k));
 
             while (aux!=NULL)
             {
-                printf(" %d:%d ",getv(aux),getw(aux));
+                printf(" %s:%d ",retwadd(dict,i+2,getv(aux)),getw(aux));
                 aux=getgraphnext(aux);
             }
             printf("\n");
@@ -72,10 +72,8 @@ int main(int argc, char *argv[]){
 int verifdif(char* w1, char* w2){
     int dif=0;
     int s=strlen(w1);
-    
     for (int i = 0; i < s; i++)
     {
-        
         if (w1[i]!=w2[i])
         {
             dif++;

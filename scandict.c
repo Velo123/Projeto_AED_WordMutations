@@ -125,7 +125,7 @@ void sdfree(sdict *dict){
     free(dict);
 }
 
-void sdprintf(sdict *dict){
+/*void sdprintf(sdict *dict){
     for (int i = 0; i < dict->max_size-1; i++)
     {
         for (int j = 0; j < dict->tam[i]; j++)
@@ -133,13 +133,13 @@ void sdprintf(sdict *dict){
             printf("%s\n",dict->dict[i][j]);
         }
     }
-}
+}*/
 
 char *retwadd(sdict *dict,int tam,int pos){
-    if (tam<=dict->max_size && pos<dict->tam[tam-2])
-    {
+    //if (tam<=dict->max_size && pos<dict->tam[tam-2])
+    //{
         return dict->dict[tam-2][pos];
-    }
+    //}
     return NULL;
 }
 

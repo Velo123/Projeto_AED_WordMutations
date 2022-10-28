@@ -6,7 +6,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/wrdmttns",
             "args": ["/mnt/d/Documentos/Fac/2Ano/AED/aux_aed/portugues.dict",
-            "/mnt/d/Documentos/Fac/2Ano/AED/aux_aed/mix_01.pals"],
+            "/mnt/d/Documentos/Fac/2Ano/AED/aux_aed/mix_03.pals"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],

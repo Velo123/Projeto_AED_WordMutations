@@ -7,6 +7,7 @@ probdata* scinput(FILE *probptr,sdict *dict){
     char temp2[101];
     int mut=0;
     int maxwsize=0;
+    int dif=0;
     int maxmut[101]={0};
     int s1=0,s2=0,fails=0,t1=0,t2=0;
     int totalprobspsize[101]={0};
@@ -21,9 +22,20 @@ probdata* scinput(FILE *probptr,sdict *dict){
             {
                 maxwsize=s1;
             }
-            if (mut>maxmut[s1-2])
+            if (s1==s2)
             {
-                maxmut[s1-2]=mut;
+                dif=0;
+                for (int i = 0; i < s1; i++)
+                {
+                    if (temp1[i]!=temp2[i])
+                    {
+                        dif++;
+                    }
+                }    
+                if(dif>mut && mut>maxmut[s1-2])
+                {
+                    maxmut[s1-2]=mut;
+                }
             }
         }
     }

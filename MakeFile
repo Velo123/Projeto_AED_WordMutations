@@ -1,6 +1,5 @@
 #Makefile wrdmttns
-CFLAGS  = -Wall -std=c99 -O3 -g
-
+CFLAGS  = -Wall -std=c99 -g
 default: all
 
 all: main.o scandict.o output.o input.o algorithms.o graphf.o
