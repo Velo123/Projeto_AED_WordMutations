@@ -24,4 +24,4 @@ graphf.o: graphf.c graphf.h
 	gcc  $(CFLAGS) -c graphf.c
 	
 clean:
-	rm -rf *o all
+	rm -rf *o $(objects) wrdmttns

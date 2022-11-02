@@ -14,8 +14,9 @@ probdata* scinput(FILE *probptr,sdict *dict){
     while(!feof(probptr)){
         if(fscanf(probptr,"%s %s %d\n",temp1,temp2,&mut)==3){
             totalprobs++;
-            if((s1=strlen(temp1))!=(s2=strlen(temp2)) || (t1=getwpos(dict,temp1))==-1 || (t2=getwpos(dict,temp2))==-1){
+            if((s1=strlen(temp1))!=(s2=strlen(temp2)) || (t1=getwpos(dict,temp1))==-1 || (t2=getwpos(dict,temp2))==-1 || mut<0){
                 fails++;
+                totalprobspsize[s1-2]--;
             }
             totalprobspsize[s1-2]++;
             if (s1>maxwsize)
@@ -32,9 +33,12 @@ probdata* scinput(FILE *probptr,sdict *dict){
                         dif++;
                     }
                 }    
-                if(dif>mut && mut>maxmut[s1-2])
+                if(dif>=mut && mut>maxmut[s1-2])
                 {
                     maxmut[s1-2]=mut;
+                }
+                else if(dif<mut && mut>maxmut[s1-2]){
+                    maxmut[s1-2]=dif;
                 }
             }
         }
@@ -119,23 +123,20 @@ probdata* scinput(FILE *probptr,sdict *dict){
     int cntp=0,cntf=0;
     while(!feof(probptr)){
         if(fscanf(probptr,"%s %s %d\n",temp1,temp2,&mut)==3){
-            if((s1=strlen(temp1))==(s2=strlen(temp2)) && (t1=getwpos(dict,temp1))!=-1 && (t2=getwpos(dict,temp2))!=-1){
+            if((s1=strlen(temp1))==(s2=strlen(temp2)) && (t1=getwpos(dict,temp1))!=-1 && (t2=getwpos(dict,temp2))!=-1 && mut>=0){
                 data->file[cntp].pal1=t1;
                 data->file[cntp].pal2=t2;
                 data->file[cntp].mod=mut;
                 data->file[cntp].s=s1;
                 data->nrpsize[s1-2][--totalprobspsize[s1-2]]=cntp;
-                /*if (mut>data->maxmut[s1-2])
-                {
-                    data->maxmut[s1-2]=mut;
-                }*/
-                cntp++;
-                
+                data->file[cntp].sols=NULL;
+                cntp++;       
             }else{
                 data->file[cntp].pal1=-1;
                 data->file[cntp].pal2=-1;
                 data->file[cntp].mod=cntf;
                 data->file[cntp].s=-1;
+                data->file[cntp].sols=NULL;
                 data->fv[cntf].pal1=(char*)malloc((s1+1)*sizeof(char));
                 if (data->fv[cntf].pal1==NULL)
                 {
@@ -173,9 +174,8 @@ probdata* scinput(FILE *probptr,sdict *dict){
                     free(data);
                     return NULL;
                 }
-                strcpy(data->fv->pal1,temp1);
-                strcpy(data->fv->pal2,temp2);
-                data->fv[cntf].mod=mut;
+                strcpy(data->fv[cntf].pal1,temp1);
+                strcpy(data->fv[cntf].pal2,temp2);
                 cntp++;
                 cntf++;
             }
@@ -184,17 +184,29 @@ probdata* scinput(FILE *probptr,sdict *dict){
     return data;
 }
 
-void printprob(probdata* d,sdict* dict){
+void printprob(probdata* d,sdict* dict,FILE* ofp){
+    sol* aux;
     for (int i = 0; i < d->totprobs; i++)
     {   
-        if (d->file[i].pal1==-1 || d->file[i].pal2==-1)
+        if (d->file[i].pal1==-1 || d->file[i].pal2==-1 || d->file[i].mod<0)
         {
-            printf("%s %s %d\n",d->fv[d->file[i].mod].pal1,d->fv[d->file[i].mod].pal2,d->fv[d->file[i].mod].mod);
+            fprintf(ofp,"%s -1\n%s\n",d->fv[d->file[i].mod].pal1,d->fv[d->file[i].mod].pal2);
         }
         else
         {
-            printf("%s %s %d\n",retwadd(dict,d->file[i].s,d->file[i].pal1),retwadd(dict,d->file[i].s,d->file[i].pal2),d->file[i].mod);
-        }   
+            fprintf(ofp,"%s %d\n",retwadd(dict,d->file[i].s,d->file[i].pal1),d->file[i].p);
+            sol* ftemp;
+            aux=d->file[i].sols;
+            while (aux!=NULL)
+            {
+                ftemp=aux;
+                fprintf(ofp,"%s\n",retwadd(dict,d->file[i].s,d->file[i].sols->w));
+                aux=aux->next;
+                free(ftemp);
+                
+            }
+        }
+        fprintf(ofp,"\n");   
     }
     return;
 }

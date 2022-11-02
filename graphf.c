@@ -11,8 +11,8 @@ typedef struct edges
 
 //grafo em tabela de listas
 edge** creategraph(int graphsize){
-    //printf("GRAPHSIZE: %d",graphsize);
     edge** gp=(edge**)calloc(graphsize,sizeof(edge*));
+    
     return gp;
 }
 

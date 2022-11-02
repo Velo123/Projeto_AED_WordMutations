@@ -140,7 +140,7 @@ char *retwadd(sdict *dict,int tam,int pos){
     //{
         return dict->dict[tam-2][pos];
     //}
-    return NULL;
+    //return NULL;
 }
 
 int getwpos(sdict *dict,char *pal){
