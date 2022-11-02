@@ -32,6 +32,11 @@ int main(int argc, char *argv[]){
         {
             continue;
         }
+        if (sanity_check(d,i,dict)==0)
+        {
+            continue;
+        }
+        
         int st=getsizetotal(dict,i);
         edge** g=creategraph(st);
         for (int cgf = 0; cgf < st; cgf++)
@@ -62,6 +67,7 @@ int main(int argc, char *argv[]){
         }*/
         freegraph(g,st);
     }
+    printprob(d,dict,ofp);
     freedata(d);
     fclose(ifp);
     fclose(ofp);
@@ -81,8 +87,56 @@ int verifdif(char* w1, char* w2,int d){
             {
                 return 0;
             }
-            
         }
     }
     return dif;
+}
+
+int sanity_check(probdata* d, int s,sdict* dict){
+
+    int necgrafo=0;
+    for (int i = 0; i < d->totpsize[s]; i++)
+    {
+        d->file[d->nrpsize[s][i]].p=0;
+        if ((d->file[d->nrpsize[s][i]].mod==0 && d->file[d->nrpsize[s][i]].pal1==d->file[d->nrpsize[s][i]].pal2) || (d->file[d->nrpsize[s][i]].pal1==d->file[d->nrpsize[s][i]].pal2))
+        {
+            /*colocar como solucao o proprio problema*/
+            d->file[d->nrpsize[s][i]].sols=(sol*)malloc(sizeof(sol));
+            if(d->file[d->nrpsize[s][i]].sols==NULL){
+                exit(EXIT_FAILURE);
+                //return NULL;
+            }       
+            d->file[d->nrpsize[s][i]].sols->w=d->file[d->nrpsize[s][i]].pal2;
+            d->file[d->nrpsize[s][i]].p=0;
+            d->file[d->nrpsize[s][i]].sols->next=NULL;
+            necgrafo++;
+            continue;
+        }
+        else
+        {
+            int difs=0;
+            char* w1=retwadd(dict,s+2,d->file[d->nrpsize[s][i]].pal1);
+            char* w2=retwadd(dict,s+2,d->file[d->nrpsize[s][i]].pal2);
+            for (int j = 0; j < s+2; j++)
+            {
+                if (w1[j]!=w2[j])
+                {
+                    difs++;
+                }
+            }
+            if(difs==1){
+                necgrafo++;
+                /*colocar como solucao o proprio problema e custo 1*/
+                d->file[d->nrpsize[s][i]].sols=(sol*)malloc(sizeof(sol));
+                d->file[d->nrpsize[s][i]].sols->w=d->file[d->nrpsize[s][i]].pal2;
+                d->file[d->nrpsize[s][i]].p=1;
+                d->file[d->nrpsize[s][i]].sols->next=NULL;
+            }
+        
+        }
+    }
+    if(necgrafo==d->totpsize[s]){
+        return 0;
+    }
+    return 1;
 }

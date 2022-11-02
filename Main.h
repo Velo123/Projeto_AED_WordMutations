@@ -11,5 +11,6 @@
 
 int main(int argc, char *argv[]);
 int verifdif(char* w1, char* w2,int d);
+int sanity_check(probdata* d, int s,sdict* dict);
 
 #endif

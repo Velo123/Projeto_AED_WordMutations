@@ -6,10 +6,17 @@
 #include<string.h>
 #include "scandict.h"
 
+
+typedef struct _sol sol;
+typedef struct _sol{
+    int w;
+    sol* next
+}sol;
+
 typedef struct failproblem{
     char* pal1;
     char* pal2;
-    int mod;
+    //int mod;
 }pfail;
 
 typedef struct problem{
@@ -17,7 +24,8 @@ typedef struct problem{
     int pal2;
     int mod;
     int s;
-    //s* sol
+    int p;
+    sol* sols
 }prob;
 
 typedef struct probdata{
@@ -30,14 +38,10 @@ typedef struct probdata{
     prob* file;
 }probdata;
 
-/*typedef struct _sol
-{
-    int w;
-    _sol* next
-}sol;*/
+
 
 probdata* scinput(FILE *probptr,sdict *dict);
-void printprob(probdata* d,sdict *dict);
+void printprob(probdata* d,sdict* dict,FILE* ofp);
 void freedata(probdata* d);
 
 #endif
