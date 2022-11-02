@@ -17,6 +17,7 @@ typedef struct problem{
     int pal2;
     int mod;
     int s;
+    //s* sol
 }prob;
 
 typedef struct probdata{
@@ -28,6 +29,12 @@ typedef struct probdata{
     pfail* fv;
     prob* file;
 }probdata;
+
+/*typedef struct _sol
+{
+    int w;
+    _sol* next
+}sol;*/
 
 probdata* scinput(FILE *probptr,sdict *dict);
 void printprob(probdata* d,sdict *dict);

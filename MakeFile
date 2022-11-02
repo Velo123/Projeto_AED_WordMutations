@@ -1,5 +1,5 @@
 #Makefile wrdmttns
-CFLAGS  = -Wall -std=c99 -g
+CFLAGS  = -Wall -std=c99 -g -pg
 default: all
 
 all: main.o scandict.o output.o input.o algorithms.o graphf.o
@@ -24,4 +24,4 @@ graphf.o: graphf.c graphf.h
 	gcc  $(CFLAGS) -c graphf.c
 	
 clean:
-	rm -rf *o all
+	rm -rf *o $(objects) wrdmttns

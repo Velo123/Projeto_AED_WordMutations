@@ -7,6 +7,12 @@
 
 #define item void*
 
+/*typedef struct _graphf
+{
+    edge** gp;
+    int gs;    
+}graph;*/
+
 
 typedef struct edges edge;
 

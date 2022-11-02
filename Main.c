@@ -40,8 +40,8 @@ int main(int argc, char *argv[]){
             for (int cgd = cgf; cgd < st; cgd++)
             {
                 char* w2=retwadd(dict,i+2,cgd);
-                int difs=verifdif(w1,w2);
-                if (difs<=d->maxmut[i] && difs>0)
+                int difs=verifdif(w1,w2,d->maxmut[i]);
+                if (difs>0)
                 {
                     addedge(g,cgf,difs,cgd);
                     addedge(g,cgd,difs,cgf);
@@ -69,7 +69,7 @@ int main(int argc, char *argv[]){
     return 0;
 }
 
-int verifdif(char* w1, char* w2){
+int verifdif(char* w1, char* w2,int d){
     int dif=0;
     int s=strlen(w1);
     for (int i = 0; i < s; i++)
@@ -77,6 +77,11 @@ int verifdif(char* w1, char* w2){
         if (w1[i]!=w2[i])
         {
             dif++;
+            if (dif>d)
+            {
+                return 0;
+            }
+            
         }
     }
     return dif;

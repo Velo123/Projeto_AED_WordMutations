@@ -10,6 +10,6 @@
 #include"graphf.h"
 
 int main(int argc, char *argv[]);
-int verifdif(char* w1, char* w2);
+int verifdif(char* w1, char* w2,int d);
 
 #endif
