@@ -36,26 +36,52 @@ int main(int argc, char *argv[]){
         {
             continue;
         }
-        
-        int st=getsizetotal(dict,i);
-        edge** g=creategraph(st);
-        for (int cgf = 0; cgf < st; cgf++)
+        graph* gi=creategraph(getsizetotal(dict,i));
+        for (int cgf = 0; cgf < gi->nv; cgf++)
         {
             char* w1=retwadd(dict,i+2,cgf);
-            for (int cgd = cgf; cgd < st; cgd++)
+            for (int cgd = cgf; cgd < gi->nv; cgd++)
             {
                 char* w2=retwadd(dict,i+2,cgd);
                 int difs=verifdif(w1,w2,d->maxmut[i]);
                 if (difs>0)
                 {
-                    addedge(g,cgf,difs,cgd);
-                    addedge(g,cgd,difs,cgf);
+                    addedge(gi->g,cgf,difs,cgd);
+                    addedge(gi->g,cgd,difs,cgf);
                 }
             }
         }
+
+
+        int* st=(int*)malloc(gi->nv*sizeof(int));
+        int* wt=(int*)malloc(gi->nv*sizeof(int));
+        heap* h=iniheap(gi->nv);
+        for (int k = 0; k < d->totpsize[i]; k++)
+        {
+            dijkstra(gi,d->file[d->nrpsize[i][k]].pal2,st,wt,h);
+        }
+        
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         /*for (int k = 0; k < st; k++)
         {
-            edge* aux=getgraphhead(g,k);
+            edge* aux=getgraphhead(gi->g,k);
             printf("V%s= ",retwadd(dict,i+2,k));
 
             while (aux!=NULL)
@@ -65,7 +91,7 @@ int main(int argc, char *argv[]){
             }
             printf("\n");
         }*/
-        freegraph(g,st);
+        freegraph(gi);
     }
     printprob(d,dict,ofp);
     freedata(d);

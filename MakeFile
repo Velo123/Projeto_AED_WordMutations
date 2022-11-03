@@ -2,8 +2,8 @@
 CFLAGS  = -Wall -std=c99 -g
 default: all
 
-all: main.o scandict.o output.o input.o algorithms.o graphf.o
-	gcc $(CFLAGS) -o wrdmttns main.o scandict.o output.o input.o algorithms.o graphf.o
+all: main.o scandict.o output.o input.o algorithms.o graphf.o heap1.o
+	gcc $(CFLAGS) -o wrdmttns main.o scandict.o output.o input.o algorithms.o graphf.o heap1.o
 
 main.o: main.c main.h
 	gcc  $(CFLAGS) -c main.c
@@ -22,6 +22,9 @@ algorithms.o: algorithms.c algorithms.h
 
 graphf.o: graphf.c graphf.h
 	gcc  $(CFLAGS) -c graphf.c
+
+heap1.o: heap1.c heap1.h
+	gcc  $(CFLAGS) -c heap1.c
 	
 clean:
 	rm -rf *o $(objects) wrdmttns

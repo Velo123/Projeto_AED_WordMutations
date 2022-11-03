@@ -1,4 +1,6 @@
 #include"graphf.h"
+#define P (wt[v] + t->w)
+
 
 typedef struct edges
 {
@@ -8,12 +10,12 @@ typedef struct edges
 }edges;
 
 
-
-//grafo em tabela de listas
-edge** creategraph(int graphsize){
-    edge** gp=(edge**)calloc(graphsize,sizeof(edge*));
+graph* creategraph(int graphsize){
+    graph* g=(graph*)malloc(sizeof(graph));
+    g->g=(edge**)calloc(graphsize,sizeof(edge*));
+    g->nv=graphsize;
     
-    return gp;
+    return g;
 }
 
 
@@ -35,27 +37,66 @@ void addedge(edge** gp,int pos,int w,int v){
     }
     
 }
-void freegraph(edge** g,int graphsize){
+
+void freegraph(graph* gi){
     edge* temp1;
-    for (int i = 0; i < graphsize; i++)
+    for (int i = 0; i < gi->nv; i++)
     {
-        while(g[i]!=NULL){
-            temp1=g[i];
-            g[i]=g[i]->next;
+        while(gi->g[i]!=NULL){
+            temp1=gi->g[i];
+            gi->g[i]=gi->g[i]->next;
             free(temp1);
         }
     }
-    free(g);
+    free(gi->g);
+    free(gi);
 }
+
 edge* getgraphhead(edge** g,int pos){
     return g[pos];
 }
+
 edge* getgraphnext(edge* e){
     return e->next;
 }
+
 int getv(edge* e){
     return e->v;
 }
+
 int getw(edge* e){
     return e->w;
+}
+
+
+void dijkstra(graph *g, int s, int st[],int wt[],heap* h)
+{
+    int v, w; 
+    edge* t;
+    
+    for (int i = 0; i < g->nv; i++)
+    {
+        st[i]=-1;
+    }
+    
+    //if(Insert(h,s)==1){}
+    
+    st[s] = -1;
+    wt[s] = 0;
+    //PQdec(s);
+    //while (!PQempty())
+    {   
+        //if (wt[v = PQdelmin()] != maxWT)
+        {
+            for (t = g->g[v]; t != NULL; t = t->next)
+            {
+                if (wt[w = t->v] > P)
+                {
+                    wt[w] = P;
+                    //PQdec(w);
+                    st[w] = v;
+                }
+            }
+        }
+    }
 }

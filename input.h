@@ -10,7 +10,7 @@
 typedef struct _sol sol;
 typedef struct _sol{
     int w;
-    sol* next
+    sol* next;
 }sol;
 
 typedef struct failproblem{
@@ -25,7 +25,7 @@ typedef struct problem{
     int mod;
     int s;
     int p;
-    sol* sols
+    sol* sols;
 }prob;
 
 typedef struct probdata{

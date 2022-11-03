@@ -2,7 +2,8 @@
     "files.associations": {
         "wordmutations.h": "c",
         "string.h": "c",
-        "scandict.h": "c"
+        "scandict.h": "c",
+        "stdlib.h": "c"
     },
     "makefile.launchConfigurations": [
         {
@@ -10,5 +11,6 @@
             "binaryPath": "/mnt/d/Documentos/Fac/2Ano/AED/Projeto_AED/wrdmttns",
             "binaryArgs": []
         }
-    ]
+    ],
+    "C_Cpp.errorSquiggles": "Disabled"
 }
