@@ -16,6 +16,9 @@ struct _heap {
 
 heap* iniheap(int size);
 void fixup(heap* h,int k);
-
+void heapinsert(heap* h,int v);
+int removemax(heap * h);
+void fixdown(heap* h,int k);
+void heapprint(heap* h);
 
 #endif

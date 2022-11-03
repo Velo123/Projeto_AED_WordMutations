@@ -26,7 +26,22 @@ int main(int argc, char *argv[]){
     }
 
     probdata* d=scinput(ifp,dict);
-    for (int i = 0; i < d->maxwsize-1; i++)
+
+    
+    ;/*heap* h=iniheap(9);
+    for (int i = 0; i < 9; i++)
+    {
+        int t;
+        scanf("%d",&t);
+        heapinsert(h,t);
+        heapprint(h);
+    }
+    printf("%d",removemax(h));
+    
+    */
+
+
+    /*for (int i = 0; i < d->maxwsize-1; i++)
     {
         if (d->totpsize[i]==0)
         {
@@ -90,9 +105,9 @@ int main(int argc, char *argv[]){
                 aux=getgraphnext(aux);
             }
             printf("\n");
-        }*/
+        }
         freegraph(gi);
-    }
+    }*/
     printprob(d,dict,ofp);
     freedata(d);
     fclose(ifp);

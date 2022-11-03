@@ -1,6 +1,6 @@
 #include"graphf.h"
 #define P (wt[v] + t->w)
-
+#define maxWT 1000000
 
 typedef struct edges
 {
@@ -77,16 +77,16 @@ void dijkstra(graph *g, int s, int st[],int wt[],heap* h)
     for (int i = 0; i < g->nv; i++)
     {
         st[i]=-1;
+        wt[i]=maxWT;
     }
     
-    //if(Insert(h,s)==1){}
+    heapinsert(h,s);
     
     st[s] = -1;
     wt[s] = 0;
-    //PQdec(s);
-    //while (!PQempty())
+    while (h->n_elements!=0)
     {   
-        //if (wt[v = PQdelmin()] != maxWT)
+        if (wt[v = removemax(h)] != maxWT)
         {
             for (t = g->g[v]; t != NULL; t = t->next)
             {
@@ -94,6 +94,7 @@ void dijkstra(graph *g, int s, int st[],int wt[],heap* h)
                 {
                     wt[w] = P;
                     //PQdec(w);
+                    //fixup(h,w);
                     st[w] = v;
                 }
             }
