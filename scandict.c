@@ -1,5 +1,14 @@
 #include "scandict.h"
 
+
+/*Data Type: (struct) dicio
+ 
+   Descrição - estrutura com
+       1) ponteiro para vetor de palavras
+       2) ponteiro para o tamanho de cada palavra
+       3) inteiro que guarda o tamanho da maior palavra
+ */
+ 
 struct dicio{
     char ***dict;
     int *tam;
@@ -7,11 +16,11 @@ struct dicio{
 };
 
 sdict *scandict(char *argv[]){
-    sdict *srdict=(sdict*)malloc(sizeof(sdict));
+    sdict *srdict=(sdict*)malloc(sizeof(sdict));//alocação mem
     if(srdict==NULL){
         exit(EXIT_FAILURE);
     }
-    srdict->max_size=0;
+    srdict->max_size=0;  
     FILE *ptr = fopen(argv[1],"r");
     if(ptr==NULL){
         free(srdict);
@@ -21,21 +30,21 @@ sdict *scandict(char *argv[]){
     char strlida[101];
     int cnt=0, size=0;
     int npals[101]={0};
-    do{
-        temp=fgetc(ptr);
+    do{                 //até não chegar ao fim do ficheiro
+        temp=fgetc(ptr);       //percorre o ficheiro                
         if((temp>='a' && temp<='z') || (temp>='A' && temp<='Z')){ //ler letras validas    
-            strlida[cnt]=temp;  //colocar no vetor
+            strlida[cnt]=temp;  //guarda o vetor 
             cnt++;
         }
         else if(cnt>1 && (temp==' ' || temp=='\t' || temp=='\n')){ //ler fim de palavra
             strlida[cnt]='\0';
             cnt=0;
             size=strlen(strlida);
-            if (size>=srdict->max_size)
+            if (size>=srdict->max_size) //atualiza valor da palavra de maior tamanho
             {
                 srdict->max_size=size;
             }
-            npals[size-2]++;
+            npals[size-2]++;        //incrementa o número de palavras de um certo tamanho numa variável temporal
         }
         else if(cnt<=1 && ((temp<'a' && temp>'z') || temp==' ' || temp=='\t' || temp=='\n')){    //descartar carateres nao validos      
             cnt=0; 
@@ -49,7 +58,7 @@ sdict *scandict(char *argv[]){
         return NULL;
     }
     fseek(ptr,0,SEEK_SET);
-    srdict->tam=(int*)calloc(srdict->max_size-1,sizeof(int));
+    srdict->tam=(int*)calloc(srdict->max_size-1,sizeof(int));   //alocação de memória para guardar o número de palavras de um certo tamanho 
     if(srdict->tam==NULL){
         free(srdict);
         fclose(ptr);
@@ -57,9 +66,9 @@ sdict *scandict(char *argv[]){
     }
     for (int i = 0; i < srdict->max_size-1; i++)
     {
-        srdict->tam[i]=npals[i];
+        srdict->tam[i]=npals[i];  //guardar o numero de palavras de cada tamanho no vetor da estrutura 
     }
-    srdict->dict=(char***)malloc((srdict->max_size-1)*sizeof(char**));
+    srdict->dict=(char***)malloc((srdict->max_size-1)*sizeof(char**));//alocação de memória para o vetor de tamanho de palavras
     if(srdict->dict==NULL){
         free(srdict->tam);
         free(srdict);
@@ -67,7 +76,7 @@ sdict *scandict(char *argv[]){
         exit(EXIT_FAILURE);
     }
     for(int i=0;i<srdict->max_size-1;i++){
-        srdict->dict[i]= (char**)malloc((npals[i])*sizeof(char*));   //alocacao do nr de palavras
+        srdict->dict[i]= (char**)malloc((npals[i])*sizeof(char*));   //alocação de memória para o vetor de palavras de tamanho [i]
         if (srdict->dict[i]==NULL)
         {
             free(srdict->dict);
@@ -88,7 +97,7 @@ sdict *scandict(char *argv[]){
             size = strlen(strlida);
             cnt=0;
             npals[size-2]--;
-            srdict->dict[size-2][npals[size-2]]=(char*)malloc((strlen(strlida)+1)*sizeof(char));
+            srdict->dict[size-2][npals[size-2]]=(char*)malloc((strlen(strlida)+1)*sizeof(char));  //Alocação de memória para os caracteres 
             if (srdict->dict[size-2][npals[size-2]]==NULL)
             {
                 for (int i = 0; i < srdict->max_size-1; i++)
