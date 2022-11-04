@@ -16,40 +16,69 @@ heap* iniheap(int size){
         exit(1);
     }
     h->heappos=(int*)malloc((size)*sizeof(int));
+    h->st=(int*)malloc((size)*sizeof(int));
+    h->wt=(int*)malloc((size)*sizeof(int));
     return h;
 }
 
-void heapinsert(heap* h,int v)
+int heapi(heap* h,int v){
+    h->heapdata[h->n_elements]=v;
+    h->heappos[v]=h->n_elements;
+    h->n_elements++;
+
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/*void heapinsert(heap* h,int v)
 {
     h->heappos[v]=h->n_elements;
     h->heapdata[h->n_elements] = v;
     h->n_elements++;
-    fixup(h, h->n_elements - 1);
+    fixup(h,v);
     return;
 }
 
 void trade(heap* h,int v1,int v2){
-    h->heappos[h->heapdata[v1]]=v2;
-    h->heappos[h->heapdata[v2]]=v1;
+
+    int pfv1=h->heappos[v1];
+    //int pfv2=h->heappos[v2];
+
+    h->heappos[v1]=h->heappos[v2];
+    h->heappos[v2]=pfv1;
+
     return;
 }
 
 void fixup(heap* h,int k){
     int t=0;
-    while ((k > 0) && ((h->heapdata)[(k - 1) / 2]<(h->heapdata)[k])){
+    int idx=h->heappos[k];
+    while ((idx > 0) && h->wt[k]<h->wt[(h->heapdata[(idx-1)/2])])
+    {
 
-        trade(h,k,(k - 1) / 2);
+        //printf("%d %d %d %d %d %d\n",k,(h->heappos)[(h->heapdata)[k]],(h->heapdata)[k],(k - 1) / 2,(h->heappos)[(h->heapdata)[(k - 1) / 2]],(h->heapdata)[(k - 1) / 2]);
 
-        t = (h->heapdata)[k];
+        trade(h,k,h->heapdata[(idx-1)/2]);
 
-        (h->heapdata)[k] = (h->heapdata)[(k - 1) / 2];
+        //printf("%d %d %d %d %d %d\n",k,(h->heappos)[(h->heapdata)[k]],(h->heapdata)[k],(k - 1) / 2,(h->heappos)[(h->heapdata)[(k - 1) / 2]],(h->heapdata)[(k - 1) / 2]);
+
+        t = (h->heapdata)[idx];
+
+        (h->heapdata)[idx] = (h->heapdata)[(idx-1)/2];
         
-        h->heappos[t]=(h->heapdata)[(k - 1) / 2];
-
+        (h->heapdata)[(idx-1)/2] = t;
         
-        (h->heapdata)[(k - 1) / 2] = t;
-        
-        k = (k - 1) / 2;
+        idx = (idx - 1) / 2;
     }
     return;
 }
@@ -58,15 +87,17 @@ void fixup(heap* h,int k){
 
 void fixdown(heap* h,int k){
     int j,t;
+
     while ((2 * k + 1) < h->n_elements) {
         j = 2 * k + 1;
-        if (((j + 1) < h->n_elements) && (h->heapdata[j]<h->heapdata[j + 1])) { 
+
+        if (((j + 1) < h->n_elements) && (h->wt[h->heapdata[j]]<h->wt[h->heapdata[j+1]])){ 
             j++;
         }
-        if (h->heapdata[k]<h->heapdata[j]) {
+        if (h->wt[h->heapdata[k]]>h->wt[h->heapdata[j]]) {
             break;
         }
-        trade(h,k,j);
+        trade(h,h->heapdata[k],h->heapdata[j]);
         t = (h->heapdata)[k];
         (h->heapdata)[k] = (h->heapdata)[j];
         (h->heapdata)[j] = t;
@@ -92,12 +123,26 @@ void heapfree(heap* h){
     return;
 }
 
+void trade2(heap* h,int v1,int v2){
+
+    int pfv1=h->heappos[v1];
+    //int pfv2=h->heappos[v2];
+
+    h->heappos[v1]=-1;
+    h->heappos[v2]=pfv1;
+
+    return;
+}
 
 int removemax(heap * h)
 {
   int t;
 
   if (h->n_elements > 0) {
+    //trade(h,h->heapdata[0],h->heapdata[(h->n_elements)-1]);
+    
+    
+    trade2(h,(h->heapdata)[0],(h->heapdata)[h->n_elements - 1]);
     t = (h->heapdata)[0];
     (h->heapdata)[0] = (h->heapdata)[h->n_elements - 1];
     (h->heapdata)[h->n_elements - 1] = t;
@@ -107,4 +152,4 @@ int removemax(heap * h)
   }
 
   return -1;
-}
+}*/

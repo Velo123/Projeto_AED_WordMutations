@@ -1,5 +1,5 @@
 #include"graphf.h"
-#define P (wt[v] + t->w)
+#define P (h->wt[v] + t->w)
 #define maxWT 1000000
 
 typedef struct edges
@@ -69,36 +69,39 @@ int getw(edge* e){
 }
 
 
-void dijkstra(graph *g, int s, int st[],int wt[],heap* h)
+void dijkstra(graph *g, int s,heap* h)
 {
     int v, w; 
     edge* t;
     
     for (int i = 0; i < g->nv; i++)
     {
-        st[i]=-1;
-        wt[i]=maxWT;
+        h->st[i]=-1;
+        h->wt[i]=maxWT;
         h->heappos[i]=-1;
     }
     
     heapinsert(h,s);
     
-    st[s] = -1;
-    wt[s] = 0;
+    h->st[s] = -1;
+    h->wt[s] = 0;
     
     while (h->n_elements!=0)
     {   
-        if (wt[v = removemax(h)] != maxWT)
+        if (h->wt[v = removemax(h)] != maxWT)
         {
             for (t = g->g[v]; t != NULL; t = t->next)
             {
-                if (P < wt[w = t->v])
+                //if(h->heappos[t->v]==-1){heapinsert(h,t->v);}    //verificar se esta ou esteve na fila
+                if(h->wt[t->v]==maxWT){heapinsert(h,t->v);}    //verificar se esta ou esteve na fila
+                
+                if (P < h->wt[w = t->v])
                 {
-                    wt[w] = P;
-                    st[w] = v;
-                    fixup(h,h->heappos[v]);
-                    if(h->heappos[w]==-1){heapinsert(h,w);}    //verificar se esta na fila
+                    h->wt[w] = P;
+                    h->st[w] = v;
+                    fixup(h,w);
                 }
+                
             }
         }
     }
