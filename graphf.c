@@ -1,6 +1,5 @@
 #include"graphf.h"
 #define maxWT 1000000
-#define P (fn[v].w + t->w)
 
 
 typedef struct edges
@@ -82,22 +81,6 @@ void dijkstra(graph *g, int s,heapnode* fn,int max,int d)
     fn[s].w=0;
     heapinsert(h,&fn[s]);
     int c;
-
-    int u=0;
-    
-    /*for (int i = 0; i < 10; i++)
-    {
-        scanf("%d",&u);
-        if (u==0)    
-        {
-            pop(h);
-        }else{
-            heapinsert(h,&fn[u]);
-        }
-        heapprint(h);
-    }*/
-                    //
-                    int cnt=0;
     while (h->n_elements!=0)
     {
         temp=pop(h);
@@ -126,24 +109,11 @@ void dijkstra(graph *g, int s,heapnode* fn,int max,int d)
             temp->visited=1;
             if (v==d)
             {
+                ffreefila(h);
                 return;
             }
-        }/*
-        if (cnt==1)
-        {
-            //heapprint(h);
-        
-            while (h->n_elements>0)
-            {
-                temp=pop(h);
-                printf("%d %d\n",temp->v,temp->w);
-            }
         }
-        
-            cnt++;*/
     }
+    ffreefila(h);
     return;
 }
-
-
-

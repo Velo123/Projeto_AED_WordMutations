@@ -50,7 +50,6 @@ void heapprint(heap* h){
     return;
 }
 
-
 heapnode* pop(heap* h){
     heapnode* t;
     if (h->n_elements>0)
@@ -95,4 +94,16 @@ void fixdown(heap* h,int k){
         k=idxc;
         
     }   
+}
+
+void clearfila(heap* h){
+    while (h->n_elements!=0)
+    {
+        pop(h);
+    }
+}
+void ffreefila(heap* h){
+    free(h->hn);
+    free(h->heappos);
+    free(h);
 }
