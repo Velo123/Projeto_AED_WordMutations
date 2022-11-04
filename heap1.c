@@ -28,7 +28,7 @@ void heapinsert(heap* h,heapnode* fn)
 void fixup(heap* h,int k){
     int idx=h->heappos[k];
     heapnode* t;
-    while ((idx>0) && (h->hn[idx]->w<h->hn[(idx-1)/2]->w))
+    while ((idx>0) && (h->hn[idx]->w<=h->hn[(idx-1)/2]->w))
     {
         h->heappos[k]=h->heappos[h->hn[(idx-1)/2]->v];
         h->heappos[h->hn[(idx-1)/2]->v]=idx;
@@ -73,7 +73,7 @@ void fixdown(heap* h,int k){
     int idxc;
     while ((2*k+1)<h->n_elements){
         idxc=2*k+1;
-        if(((idxc+1)<h->n_elements) && (h->hn[idxc]->w>h->hn[idxc+1]->w))
+        if(((idxc+1)<h->n_elements) && (h->hn[idxc]->w>=h->hn[idxc+1]->w))
         {
             idxc++;
         }

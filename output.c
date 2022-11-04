@@ -6,7 +6,7 @@ FILE *openfile(char *argv[]){
         return 0;
     strcpy(fout,argv[2]);
     fout[strlen(argv[2])-5]='\0';
-    strcat(fout,".stats");
+    strcat(fout,".paths");
     FILE *fp=fopen(fout,"w");
     free(fout);
     return fp;

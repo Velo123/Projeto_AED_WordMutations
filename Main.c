@@ -40,9 +40,11 @@ int main(int argc, char *argv[]){
         }
         graph* gi=creategraph(getsizetotal(dict,i));
         for (int cgf = 0; cgf < gi->nv; cgf++)
+        //for (int cgf = gi->nv-1; cgf > -1; cgf--)
         {
             char* w1=retwadd(dict,i+2,cgf);
             for (int cgd = cgf; cgd < gi->nv; cgd++)
+            //for (int cgd = cgf; cgd > -1; cgd--)
             {
                 char* w2=retwadd(dict,i+2,cgd);
                 int difs=verifdif(w1,w2,d->maxmut[i]);
