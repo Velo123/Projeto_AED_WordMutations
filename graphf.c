@@ -70,12 +70,17 @@ int getw(edge* e){
     return e->w;
 }
 
-void dijkstra(graph *g, int s,heapnode* fn,int max,int d)
+int dijkstra(graph *g, int s,heapnode* fn,int max,int d)
 {
     int v, w; 
     edge* t;
 
     heap* h=iniheap(g->nv);
+    if (h==NULL)
+    {
+        return -1;
+    }
+    
     heapnode* temp;
 
     fn[s].w=0;
@@ -91,7 +96,8 @@ void dijkstra(graph *g, int s,heapnode* fn,int max,int d)
             c=temp->w;
             for (t = g->g[v]; t != NULL; t = t->next)
             {   
-                if (temp->visited==1 || t->w>max){continue;}
+                //if (temp->visited==1 || t->w>max){continue;}
+                if (fn[t->v].visited==1 || t->w>max){continue;}
                 if (fn[t->v].w==maxWT)
                 {
                     fn[t->v].w=(t->w)*(t->w)+c;
@@ -110,10 +116,10 @@ void dijkstra(graph *g, int s,heapnode* fn,int max,int d)
             if (v==d)
             {
                 ffreefila(h);
-                return;
+                return 1;
             }
         }
     }
     ffreefila(h);
-    return;
+    return 0;
 }

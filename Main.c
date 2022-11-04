@@ -40,11 +40,9 @@ int main(int argc, char *argv[]){
         }
         graph* gi=creategraph(getsizetotal(dict,i));
         for (int cgf = 0; cgf < gi->nv; cgf++)
-        //for (int cgf = gi->nv-1; cgf > -1; cgf--)
         {
             char* w1=retwadd(dict,i+2,cgf);
             for (int cgd = cgf; cgd < gi->nv; cgd++)
-            //for (int cgd = cgf; cgd > -1; cgd--)
             {
                 char* w2=retwadd(dict,i+2,cgd);
                 int difs=verifdif(w1,w2,d->maxmut[i]);
@@ -56,11 +54,23 @@ int main(int argc, char *argv[]){
             }
         }
         heapnode* fn=(heapnode*)malloc(gi->nv*sizeof(heapnode));
+        if(fn==NULL){
+            freedata(d);
+            fclose(ifp);
+            fclose(ofp);
+            sdfree(dict);
+            freegraph(gi);
+            exit(EXIT_FAILURE);    
+        }
+        int r;
         for (int k = 0; k < d->totpsize[i]; k++)
         {
-            int aux=d->file[d->nrpsize[i][k]].pal2;
-
+            if (d->file[d->nrpsize[i][k]].pal1!=-1 && d->file[d->nrpsize[i][k]].sols!=NULL)
+            {
+                continue;
+            }
             
+            int aux=d->file[d->nrpsize[i][k]].pal2;
             for (int l = 0; l < gi->nv; l++)
             {
                 fn[l].from=-1;
@@ -68,21 +78,62 @@ int main(int argc, char *argv[]){
                 fn[l].w=maxWT;
                 fn[l].v=l;
             }
-            dijkstra(gi,d->file[d->nrpsize[i][k]].pal1,fn,d->maxmut[i],d->file[d->nrpsize[i][k]].pal2);
-            if(fn[aux].from==-1){
+            r = dijkstra(gi,d->file[d->nrpsize[i][k]].pal1,fn,d->maxmut[i],d->file[d->nrpsize[i][k]].pal2);
+            if (r==-1)
+            {
+                free(fn);
+                freedata(d);
+                fclose(ifp);
+                fclose(ofp);
+                sdfree(dict);
+                freegraph(gi);
+                exit(EXIT_FAILURE); 
+            }
+            else if(r==0){
+                d->file[d->nrpsize[i][k]].p=-1;
                 d->file[d->nrpsize[i][k]].sols=NULL;
             }
-            else
+            else if(r==1)
             {
                 d->file[d->nrpsize[i][k]].p=fn[aux].w;
                 sol* temp1;
                 d->file[d->nrpsize[i][k]].sols=(sol*)malloc(sizeof(sol));
-                d->file[d->nrpsize[i][k]].sols->w=fn[aux].from;
+                if (d->file[d->nrpsize[i][k]].sols==NULL)
+                {
+                    free(fn);
+                    freegraph(gi);
+                    freedata(d);
+                    fclose(ifp);
+                    fclose(ofp);
+                    sdfree(dict);
+                    exit(EXIT_FAILURE);
+                }
+                
+                d->file[d->nrpsize[i][k]].sols->w =fn[aux].from;
                 d->file[d->nrpsize[i][k]].sols->next=NULL;
                 aux=fn[aux].from;
                 while (fn[fn[aux].from].from!=-1)
                 {
                     temp1=(sol*)malloc(sizeof(sol));
+                    if (temp1==NULL)
+                    {
+                        sol* temp2;
+                        temp1=d->file[d->nrpsize[i][k]].sols;
+                        while (temp1->next!=NULL)
+                        {
+                            temp2=temp1;
+                            temp1=temp1->next;
+                            free(temp2);
+                        }
+                        free(d->file[d->nrpsize[i][k]].sols);
+                        free(fn);
+                        freegraph(gi);
+                        freedata(d);
+                        fclose(ifp);
+                        fclose(ofp);
+                        sdfree(dict);
+                        exit(EXIT_FAILURE);
+                    }
                     temp1->w=fn[aux].from;
                     temp1->next=d->file[d->nrpsize[i][k]].sols;
                     d->file[d->nrpsize[i][k]].sols=temp1;
