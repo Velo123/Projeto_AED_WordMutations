@@ -78,26 +78,31 @@ void dijkstra(graph *g, int s, int st[],int wt[],heap* h)
     {
         st[i]=-1;
         wt[i]=maxWT;
+        h->heappos[i]=-1;
     }
     
     heapinsert(h,s);
     
     st[s] = -1;
     wt[s] = 0;
+    
     while (h->n_elements!=0)
     {   
         if (wt[v = removemax(h)] != maxWT)
         {
             for (t = g->g[v]; t != NULL; t = t->next)
             {
-                if (wt[w = t->v] > P)
+                if (P < wt[w = t->v])
                 {
                     wt[w] = P;
-                    //PQdec(w);
-                    //fixup(h,w);
                     st[w] = v;
+                    if(h->heappos[w]!=-1){continue;}    //verificar se esta na fila
+                    heapinsert(h,w);
+                    fixup(h,h->heappos[w]);
                 }
             }
         }
+        
     }
+    return;
 }

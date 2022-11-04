@@ -12,8 +12,10 @@ struct _heap {
     int n_elements;
     int size;
     int* heapdata;
+    int* heappos;
 };
 
+void heapfree(heap* h);
 heap* iniheap(int size);
 void fixup(heap* h,int k);
 void heapinsert(heap* h,int v);

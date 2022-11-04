@@ -5,7 +5,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/wrdmttns",
-            "args": ["/mnt/d/Documentos/Fac/2Ano/AED/aux_aed/portuguest.dict",
+            "args": ["/mnt/d/Documentos/Fac/2Ano/AED/aux_aed/portugues.dict",
             "/mnt/d/Documentos/Fac/2Ano/AED/aux_aed/mix1.pals"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

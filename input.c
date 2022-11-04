@@ -200,11 +200,11 @@ void printprob(probdata* d,sdict* dict,FILE* ofp){
             while (aux!=NULL)
             {
                 ftemp=aux;
-                fprintf(ofp,"%s\n",retwadd(dict,d->file[i].s,d->file[i].sols->w));
+                fprintf(ofp,"%s\n",retwadd(dict,d->file[i].s,aux->w));
                 aux=aux->next;
                 free(ftemp);
-                
             }
+            fprintf(ofp,"%s\n",retwadd(dict,d->file[i].s,d->file[i].pal2));
         }
         fprintf(ofp,"\n");   
     }

@@ -16,17 +16,26 @@ heap* iniheap(int size){
         fprintf(stderr, "Error in malloc of heap\n");
         exit(1);
     }
+    h->heappos=(int*)malloc((size)*sizeof(int));
     
     return h;
 }
 
 void heapinsert(heap* h,int v)
 {
+    
+    h->heappos[v]=h->n_elements;
     h->heapdata[h->n_elements] = v;
     h->n_elements++;
     fixup(h, h->n_elements - 1);
+    return;
 }
 
+void trade(heap* h,int v1,int v2,int p1, int p2){
+    h->heappos[v1]=p2;
+    h->heappos[v2]=p1;
+    return;
+}
 
 void fixup(heap* h,int k){
     int t=0;
@@ -34,8 +43,10 @@ void fixup(heap* h,int k){
         t = (h->heapdata)[k];
         (h->heapdata)[k] = (h->heapdata)[(k - 1) / 2];
         (h->heapdata)[(k - 1) / 2] = t;
+        trade(h,t,(h->heapdata)[k],k,(k - 1) / 2);
         k = (k - 1) / 2;
     }
+    return;
 }
 
 void fixdown(heap* h,int k){
@@ -62,8 +73,17 @@ void heapprint(heap* h){
         printf("%d\n",h->heapdata[i]);
     }
     printf("---------\n");
-    
+    return;
 }
+
+
+void heapfree(heap* h){
+    free(h->heapdata);
+    free(h->heappos);
+    free(h);
+    return;
+}
+
 
 int removemax(heap * h)
 {
@@ -73,26 +93,10 @@ int removemax(heap * h)
     t = (h->heapdata)[0];
     (h->heapdata)[0] = (h->heapdata)[h->n_elements - 1];
     (h->heapdata)[h->n_elements - 1] = t;
-    //free(h->heapdata[h->n_elements - 1]);
     h->n_elements--;
     fixdown(h, 0);
     return t;
   }
 
   return -1;
-}
-
-void Heapify(heap * h)
-{
-
-  /****************************************************
-   * Insert Heapify code here
-   ****************************************************/
-   int i;
-
-   for (i = h->n_elements/2-1; i >= 0; i--)
-      fixdown(h, i);
-
-
-   return;
 }
