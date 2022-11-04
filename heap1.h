@@ -13,8 +13,24 @@ struct _heap {
     int size;
     int* heapdata;
     int* heappos;
+    int* st;
+    int* wt;
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+void trade2(heap* h,int v1,int v2);
 void heapfree(heap* h);
 heap* iniheap(int size);
 void fixup(heap* h,int k);
@@ -22,5 +38,5 @@ void heapinsert(heap* h,int v);
 int removemax(heap * h);
 void fixdown(heap* h,int k);
 void heapprint(heap* h);
-void trade(heap* h,int v1,int v2);
+void trade(heap* h,int v1,int v2);*/
 #endif
