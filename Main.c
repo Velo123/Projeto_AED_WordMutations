@@ -52,45 +52,6 @@ int main(int argc, char *argv[]){
                 }
             }
         }
-
-
-        /*for (int k = 0; k < gi->nv; k++)
-        {
-            edge* aux=getgraphhead(gi->g,k);
-            printf("V%s= ",retwadd(dict,i+2,k));
-
-            while (aux!=NULL)
-            {
-                printf(" %s:%d ",retwadd(dict,i+2,getv(aux)),getw(aux));              
-                aux=getgraphnext(aux);
-            }
-            printf("\n");
-        }*/
-        /*for (int z = 0; z < 6; z++)
-        {
-            int t,p;
-            printf("v%d: ",z);
-            scanf("%d %d",&t,&p);
-
-            heapinsert(h,t,-1,p);
-            heapprint(h);
-        }
-
-        h->hn[2].w=0;
-
-        fixup(h,2);
-
-        printf("\n----------\n");
-        for (int z = 0; z < 6; z++)
-        {
-            heapnode t;
-            //printf("POP %d -> %d\n",1,1);
-            t=pop(h);
-            
-            printf("POP %d -> %d\n",z,t.v);
-            heapprint(h);
-        }*/
-        
         heapnode* fn=(heapnode*)malloc(gi->nv*sizeof(heapnode));
         for (int k = 0; k < d->totpsize[i]; k++)
         {
@@ -105,7 +66,7 @@ int main(int argc, char *argv[]){
                 fn[l].v=l;
             }
             dijkstra(gi,d->file[d->nrpsize[i][k]].pal1,fn,d->maxmut[i],d->file[d->nrpsize[i][k]].pal2);
-            printf("%d",fn[aux].w);
+            printf("%d\n",fn[aux].w);
             while (fn[aux].from!=-1)
             {
                 printf("%s\n",retwadd(dict,i+2,fn[aux].from));
