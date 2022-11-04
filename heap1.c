@@ -30,18 +30,12 @@ void fixup(heap* h,int k){
     heapnode* t;
     while ((idx>0) && (h->hn[idx]->w<h->hn[(idx-1)/2]->w))
     {
-
-        t=h->hn[idx];
-        h->hn[idx]=h->hn[(idx-1)/2];
-        h->hn[(idx-1)/2]=t;
-        idx=(idx-1)/2;
-
-        /*h->heappos[k]=h->heappos[h->hn[(idx-1)/2]->v];
+        h->heappos[k]=h->heappos[h->hn[(idx-1)/2]->v];
         h->heappos[h->hn[(idx-1)/2]->v]=idx;
         t=h->hn[idx];
         h->hn[idx]=h->hn[(idx-1)/2];
         h->hn[(idx-1)/2]=t;
-        idx=(idx-1)/2;*/
+        idx=(idx-1)/2;
     }
     return;
 }

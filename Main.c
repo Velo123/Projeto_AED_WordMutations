@@ -55,7 +55,7 @@ int main(int argc, char *argv[]){
         heapnode* fn=(heapnode*)malloc(gi->nv*sizeof(heapnode));
         for (int k = 0; k < d->totpsize[i]; k++)
         {
-            int aux=d->file[d->nrpsize[i][k]].pal2;
+            int aux=d->file[d->nrpsize[i][k]].pal1;
 
             
             for (int l = 0; l < gi->nv; l++)
@@ -65,13 +65,14 @@ int main(int argc, char *argv[]){
                 fn[l].w=maxWT;
                 fn[l].v=l;
             }
-            dijkstra(gi,d->file[d->nrpsize[i][k]].pal1,fn,d->maxmut[i],d->file[d->nrpsize[i][k]].pal2);
+            dijkstra(gi,d->file[d->nrpsize[i][k]].pal2,fn,d->maxmut[i],d->file[d->nrpsize[i][k]].pal1);
             printf("%d\n",fn[aux].w);
             while (fn[aux].from!=-1)
             {
                 printf("%s\n",retwadd(dict,i+2,fn[aux].from));
                 aux=fn[aux].from;
             }
+            
                 
             
 
