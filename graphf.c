@@ -1,6 +1,7 @@
 #include"graphf.h"
-#define P (h->wt[v] + t->w)
 #define maxWT 1000000
+#define P (fn[v].w + t->w)
+
 
 typedef struct edges
 {
@@ -8,6 +9,8 @@ typedef struct edges
     int v;
     edge* next;
 }edges;
+
+
 
 
 graph* creategraph(int graphsize){
@@ -68,42 +71,79 @@ int getw(edge* e){
     return e->w;
 }
 
-
-void dijkstra(graph *g, int s,heap* h)
+void dijkstra(graph *g, int s,heapnode* fn,int max,int d)
 {
     int v, w; 
     edge* t;
+
+    heap* h=iniheap(g->nv);
+    heapnode* temp;
+
+    fn[s].w=0;
+    heapinsert(h,&fn[s]);
+    int c;
+
+    int u=0;
     
-    for (int i = 0; i < g->nv; i++)
+    /*for (int i = 0; i < 10; i++)
     {
-        h->st[i]=-1;
-        h->wt[i]=maxWT;
-        h->heappos[i]=-1;
-    }
-    
-    heapinsert(h,s);
-    
-    h->st[s] = -1;
-    h->wt[s] = 0;
-    
-    while (h->n_elements!=0)
-    {   
-        if (h->wt[v = removemax(h)] != maxWT)
+        scanf("%d",&u);
+        if (u==0)    
         {
+            pop(h);
+        }else{
+            heapinsert(h,&fn[u]);
+        }
+        heapprint(h);
+    }*/
+                    //
+                    int cnt=0;
+    while (h->n_elements!=0)
+    {
+        temp=pop(h);
+        
+        if (temp->w != maxWT)
+        {
+            v=temp->v;
+            c=temp->w;
             for (t = g->g[v]; t != NULL; t = t->next)
-            {
-                //if(h->heappos[t->v]==-1){heapinsert(h,t->v);}    //verificar se esta ou esteve na fila
-                if(h->wt[t->v]==maxWT){heapinsert(h,t->v);}    //verificar se esta ou esteve na fila
-                
-                if (P < h->wt[w = t->v])
+            {   
+                if (temp->visited==1 || t->w>max){continue;}
+                if (fn[t->v].w==maxWT)
                 {
-                    h->wt[w] = P;
-                    h->st[w] = v;
-                    fixup(h,w);
+                    fn[t->v].w=(t->w)*(t->w)+c;
+                    fn[t->v].from=v;
+                    heapinsert(h,&fn[t->v]);
                 }
                 
+                else if (fn[t->v].w > (t->w)*(t->w)+c)
+                {
+                    fn[t->v].w=(t->w)*(t->w)+c;
+                    fn[t->v].from=v;
+                    fixup(h,t->v);
+                }
+            }
+            temp->visited=1;
+            if (v==d)
+            {
+                return;
+            }
+        }/*
+        if (cnt==1)
+        {
+            //heapprint(h);
+        
+            while (h->n_elements>0)
+            {
+                temp=pop(h);
+                printf("%d %d\n",temp->v,temp->w);
             }
         }
+        
+            cnt++;*/
     }
     return;
 }
+
+
+

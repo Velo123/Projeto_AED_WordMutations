@@ -1,3 +1,4 @@
+
 #ifndef graphf
 #define graphf
 
@@ -24,7 +25,7 @@ int getv(edge* g);
 int getw(edge* g);
 edge* getgraphnext(edge* e);
 void freegraph(graph* gi);
-void dijkstra(graph *g, int s,heap* h);
+void dijkstra(graph *g, int s,heapnode* fn,int max,int d);
 
 
 

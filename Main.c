@@ -1,5 +1,5 @@
 #include "main.h"
-
+#define maxWT 1000000
 int main(int argc, char *argv[]){
     if(argc!=3 || strstr(argv[1],".dict")==NULL || strstr(argv[2],".pals")==NULL){
         exit(EXIT_FAILURE);
@@ -66,42 +66,77 @@ int main(int argc, char *argv[]){
             }
             printf("\n");
         }*/
+        /*for (int z = 0; z < 6; z++)
+        {
+            int t,p;
+            printf("v%d: ",z);
+            scanf("%d %d",&t,&p);
 
+            heapinsert(h,t,-1,p);
+            heapprint(h);
+        }
 
-        heap* h=iniheap(gi->nv);
+        h->hn[2].w=0;
+
+        fixup(h,2);
+
+        printf("\n----------\n");
+        for (int z = 0; z < 6; z++)
+        {
+            heapnode t;
+            //printf("POP %d -> %d\n",1,1);
+            t=pop(h);
+            
+            printf("POP %d -> %d\n",z,t.v);
+            heapprint(h);
+        }*/
+        
+        heapnode* fn=(heapnode*)malloc(gi->nv*sizeof(heapnode));
         for (int k = 0; k < d->totpsize[i]; k++)
         {
-            dijkstra(gi,d->file[d->nrpsize[i][k]].pal1,h);
             int aux=d->file[d->nrpsize[i][k]].pal2;
-            //printf("%d\n",aux);
-            /*for (int l = 0; l < gi->nv; l++)
-            {
-                printf("%d\t",st[l]);
-            }*/
-            //printf("\n");
+
             
-            if(h->st[aux]==-1){
+            for (int l = 0; l < gi->nv; l++)
+            {
+                fn[l].from=-1;
+                fn[l].visited=0;
+                fn[l].w=maxWT;
+                fn[l].v=l;
+            }
+            dijkstra(gi,d->file[d->nrpsize[i][k]].pal1,fn,d->maxmut[i],d->file[d->nrpsize[i][k]].pal2);
+            printf("%d",fn[aux].w);
+            while (fn[aux].from!=-1)
+            {
+                printf("%s\n",retwadd(dict,i+2,fn[aux].from));
+                aux=fn[aux].from;
+            }
+                
+            
+
+            
+            /*if(h->hn[aux].from==-1){
                 d->file[d->nrpsize[i][k]].sols=NULL;
             }
             else
             {
-                d->file[d->nrpsize[i][k]].p=h->wt[aux];
+                d->file[d->nrpsize[i][k]].p=h->hn[aux].from;
                 sol* temp1;
                 d->file[d->nrpsize[i][k]].sols=(sol*)malloc(sizeof(sol));
-                d->file[d->nrpsize[i][k]].sols->w=h->st[aux];
+                d->file[d->nrpsize[i][k]].sols->w=h->hn[aux].from;
                 d->file[d->nrpsize[i][k]].sols->next=NULL;
-                aux=h->st[aux];
-                while (h->st[h->st[aux]]!=-1)
+                aux=h->hn[aux].from;
+                while (h->hn[h->hn[aux].from].from!=-1)
                 {
                     //printf("%s\n",retwadd(dict,i+2,d->file[d->nrpsize[i][k]].sols->w));
                     temp1=(sol*)malloc(sizeof(sol));
-                    temp1->w=h->st[aux];
+                    temp1->w=h->hn[aux].from;
                     temp1->next=d->file[d->nrpsize[i][k]].sols;
                     d->file[d->nrpsize[i][k]].sols=temp1;
-                    aux=h->st[aux];   
+                    aux=h->hn[aux].from;   
                 }
                 //printf("%s %d\n",retwadd(dict,i+2,d->file[d->nrpsize[i][k]].sols->w),d->file[d->nrpsize[i][k]].p);
-            }
+            }*/
         }
         //heapfree(h);
         //freegraph(gi);
@@ -128,7 +163,7 @@ int verifdif(char* w1, char* w2,int d){
             }
         }
     }
-    return (dif*dif);
+    return (dif);
 }
 
 int sanity_check(probdata* d, int s,sdict* dict){
