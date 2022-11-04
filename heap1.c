@@ -8,7 +8,6 @@ heap* iniheap(int size){
         fprintf(stderr, "Error in malloc of heap\n");
         exit(1);
     }
-
     h->n_elements=0;
     h->size=size;
     h->heapdata=(int*)malloc(size*sizeof(int));
@@ -17,13 +16,11 @@ heap* iniheap(int size){
         exit(1);
     }
     h->heappos=(int*)malloc((size)*sizeof(int));
-    
     return h;
 }
 
 void heapinsert(heap* h,int v)
 {
-    
     h->heappos[v]=h->n_elements;
     h->heapdata[h->n_elements] = v;
     h->n_elements++;
@@ -31,23 +28,33 @@ void heapinsert(heap* h,int v)
     return;
 }
 
-void trade(heap* h,int v1,int v2,int p1, int p2){
-    h->heappos[v1]=p2;
-    h->heappos[v2]=p1;
+void trade(heap* h,int v1,int v2){
+    h->heappos[h->heapdata[v1]]=v2;
+    h->heappos[h->heapdata[v2]]=v1;
     return;
 }
 
 void fixup(heap* h,int k){
     int t=0;
     while ((k > 0) && ((h->heapdata)[(k - 1) / 2]<(h->heapdata)[k])){
+
+        trade(h,k,(k - 1) / 2);
+
         t = (h->heapdata)[k];
+
         (h->heapdata)[k] = (h->heapdata)[(k - 1) / 2];
+        
+        h->heappos[t]=(h->heapdata)[(k - 1) / 2];
+
+        
         (h->heapdata)[(k - 1) / 2] = t;
-        trade(h,t,(h->heapdata)[k],k,(k - 1) / 2);
+        
         k = (k - 1) / 2;
     }
     return;
 }
+
+
 
 void fixdown(heap* h,int k){
     int j,t;
@@ -59,6 +66,7 @@ void fixdown(heap* h,int k){
         if (h->heapdata[k]<h->heapdata[j]) {
             break;
         }
+        trade(h,k,j);
         t = (h->heapdata)[k];
         (h->heapdata)[k] = (h->heapdata)[j];
         (h->heapdata)[j] = t;

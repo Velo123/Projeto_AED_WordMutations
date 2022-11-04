@@ -3,7 +3,8 @@
         "wordmutations.h": "c",
         "string.h": "c",
         "scandict.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "type_traits": "c"
     },
     "makefile.launchConfigurations": [
         {

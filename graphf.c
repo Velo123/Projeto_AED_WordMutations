@@ -96,13 +96,11 @@ void dijkstra(graph *g, int s, int st[],int wt[],heap* h)
                 {
                     wt[w] = P;
                     st[w] = v;
-                    if(h->heappos[w]!=-1){continue;}    //verificar se esta na fila
-                    heapinsert(h,w);
-                    fixup(h,h->heappos[w]);
+                    fixup(h,h->heappos[v]);
+                    if(h->heappos[w]==-1){heapinsert(h,w);}    //verificar se esta na fila
                 }
             }
         }
-        
     }
     return;
 }

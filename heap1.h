@@ -22,5 +22,5 @@ void heapinsert(heap* h,int v);
 int removemax(heap * h);
 void fixdown(heap* h,int k);
 void heapprint(heap* h);
-
+void trade(heap* h,int v1,int v2);
 #endif
