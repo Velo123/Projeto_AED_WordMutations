@@ -8,6 +8,5 @@
 void insertion(char** a, int l, int r);
 void quicksort(char** a, int l, int r);
 int partition(char** a, int l, int r);
-char* med3(char** p,int l,int r);
 
 #endif

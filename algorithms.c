@@ -39,52 +39,6 @@ void quicksort(char** a, int l, int r)
     return;
 }
 
-char* med3(char** p,int l,int r){
-    char* a=p[l];
-    char* b=p[(l+r)/2];
-    char* c=p[r];
-    if (strcmp(a,b)<0 && strcmp(a,c)<0)
-    {
-        if (strcmp(b,c)<0)
-        {
-            return b;
-            
-        }
-        else
-        {
-            return c;
-        }
-    }
-    else if (strcmp(b,a)<0 && strcmp(b,c)<0)
-    {
-        if (strcmp(a,c)<0)
-        {
-            return a;
-            
-        }
-        else
-        {
-            return c;
-            
-        }
-    }
-    else if (strcmp(b,a)<0 && strcmp(b,c)<0)
-    {
-        if (strcmp(a,b)<0)
-        {
-            return a;
-            
-        }
-        else
-        {
-            return b;
-            
-        }
-    }
-    return c;
-}
-
-
 int partition(char** a, int l, int r)
 {
     int i, j;

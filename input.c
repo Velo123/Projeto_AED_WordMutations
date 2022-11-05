@@ -1,6 +1,6 @@
 #include "input.h"
 
-
+//criacao de uma estrutura com os problemas todos e as informacoes necessarias para trabalhar com eles
 probdata* scinput(FILE *probptr,sdict *dict){
     int totalprobs=0;
     char temp1[101];
@@ -11,7 +11,7 @@ probdata* scinput(FILE *probptr,sdict *dict){
     int maxmut[101]={0};
     int s1=0,s2=0,fails=0,t1=0,t2=0;
     int totalprobspsize[101]={0};
-    while(!feof(probptr)){
+    while(!feof(probptr)){  //ciclo para ver quanta memoria alocar
         if(fscanf(probptr,"%s %s %d\n",temp1,temp2,&mut)==3){
             totalprobs++;
             if((s1=strlen(temp1))!=(s2=strlen(temp2)) || (t1=getwpos(dict,temp1))==-1 || (t2=getwpos(dict,temp2))==-1 || mut<0){
@@ -24,7 +24,7 @@ probdata* scinput(FILE *probptr,sdict *dict){
                 maxwsize=s1;
             }
             if (s1==s2)
-            {
+            {   //testes para casos em que a mutacao maxima e maior que a palavra gerir qual sera verdadeiramente a mutacao maxima
                 dif=0;
                 for (int i = 0; i < s1; i++)
                 {
@@ -37,9 +37,15 @@ probdata* scinput(FILE *probptr,sdict *dict){
                 {
                     maxmut[s1-2]=mut;
                 }
+                else if (mut>dif && dif>maxmut[s1-2])
+                {
+                    maxmut[s1-2]=dif;
+                }
+                
             }
         }
     }
+    //alocacao de memoria
     probdata* data=(probdata*)malloc(sizeof(probdata));
     if (data==NULL)
     {
@@ -118,9 +124,9 @@ probdata* scinput(FILE *probptr,sdict *dict){
     }
     fseek(probptr,0,SEEK_SET);
     int cntp=0,cntf=0;
-    while(!feof(probptr)){
+    while(!feof(probptr)){  //ciclo para guardar os dados
         if(fscanf(probptr,"%s %s %d\n",temp1,temp2,&mut)==3){
-            if((s1=strlen(temp1))==(s2=strlen(temp2)) && (t1=getwpos(dict,temp1))!=-1 && (t2=getwpos(dict,temp2))!=-1 && mut>=0){
+            if((s1=strlen(temp1))==(s2=strlen(temp2)) && (t1=getwpos(dict,temp1))!=-1 && (t2=getwpos(dict,temp2))!=-1 && mut>=0){ //se o problema estiver bem definido atribui tudo normalmente
                 data->file[cntp].pal1=t1;
                 data->file[cntp].pal2=t2;
                 data->file[cntp].mod=mut;
@@ -128,7 +134,7 @@ probdata* scinput(FILE *probptr,sdict *dict){
                 data->nrpsize[s1-2][--totalprobspsize[s1-2]]=cntp;
                 data->file[cntp].sols=NULL;
                 cntp++;       
-            }else{
+            }else{ //se o problema estiver mal definido: alocar espaco para as palavras do problema e colocar em fv, file[cntp].mod guarda a posicao do problema em fv 
                 data->file[cntp].pal1=-1;
                 data->file[cntp].pal2=-1;
                 data->file[cntp].mod=cntf;
@@ -181,6 +187,7 @@ probdata* scinput(FILE *probptr,sdict *dict){
     return data;
 }
 
+//printar solucoes. percorre e printa as palavras na lista guardada em d->file[i].sols
 void printprob(probdata* d,sdict* dict,FILE* ofp){
     sol* aux;
     for (int i = 0; i < d->totprobs; i++)
@@ -207,6 +214,7 @@ void printprob(probdata* d,sdict* dict,FILE* ofp){
     return;
 }
 
+//libertar memoria alocada
 void freedata(probdata* d){
     int aux=0;
     for (int i = 0; i < d->totprobs; i++)
@@ -233,6 +241,8 @@ void freedata(probdata* d){
     free(d);
     return;
 }
+
+//funcao de monitoracao. printar o que esta guardado em d
 void printinputs(sdict*dict,probdata* d){
     for (int i = 0; i < d->totprobs; i++)
     {   

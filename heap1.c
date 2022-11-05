@@ -1,7 +1,7 @@
 #include"heap1.h"
 
-
-heap* iniheap(int size){
+//inciar fila
+heap* iniheap(int size){    
     heap* h;
 
     h=(heap *) malloc(sizeof(heap));
@@ -24,6 +24,7 @@ heap* iniheap(int size){
     return h;
 }
 
+//inserir elemento na fila e coloccar no sitio certo de acordo com a prioridade
 void heapinsert(heap* h,heapnode* fn)
 {
     h->hn[h->n_elements]=fn;
@@ -33,6 +34,7 @@ void heapinsert(heap* h,heapnode* fn)
     return;
 }
 
+//atualizar prioridade do vertice k dentro da fila
 void fixup(heap* h,int k){
     int idx=h->heappos[k];
     heapnode* t;
@@ -48,6 +50,7 @@ void fixup(heap* h,int k){
     return;
 }
 
+//printar fila
 void heapprint(heap* h){
     printf("---------\n");
     for (int i = 0; i < h->n_elements; i++)
@@ -58,6 +61,7 @@ void heapprint(heap* h){
     return;
 }
 
+//retirar elemento da fila. colocar tudo no sitio certo e atualizar as suas posicoes dentro da fila
 heapnode* pop(heap* h){
     heapnode* t;
     if (h->n_elements>0)
@@ -77,6 +81,8 @@ heapnode* pop(heap* h){
     return NULL;
 }
 
+
+//verificar
 void fixdown(heap* h,int k){
     int idxc;
     while ((2*k+1)<h->n_elements){

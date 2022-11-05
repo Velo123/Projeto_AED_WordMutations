@@ -30,15 +30,24 @@ int main(int argc, char *argv[]){
 
     for (int i = 0; i < d->maxwsize-1; i++)
     {
-        if (d->totpsize[i]==0)
+        if (d->totpsize[i]==0) //verificar se há problemas de tamanho i+2
         {
             continue;
         }
-        if (sanity_check(d,i,dict)==0)
+        if (sanity_check(d,i,dict)==0)  //verificar se vale a pena criar grafo
         {
             continue;
         }
-        graph* gi=creategraph(getsizetotal(dict,i));
+        else if (sanity_check(d,i,dict)==-1)  //caso nao seja possivel alocar memoria para solucoes
+        {
+            freedata(d);
+            fclose(ifp);
+            fclose(ofp);
+            sdfree(dict);
+            exit(EXIT_FAILURE);
+        }
+        //criar grafo e adicionar arestas
+        graph* gi=creategraph(getsizetotal(dict,i));   
         for (int cgf = 0; cgf < gi->nv; cgf++)
         {
             char* w1=retwadd(dict,i+2,cgf);
@@ -53,6 +62,7 @@ int main(int argc, char *argv[]){
                 }
             }
         }
+        //criar fakenodes
         heapnode* fn=(heapnode*)malloc(gi->nv*sizeof(heapnode));
         if(fn==NULL){
             freedata(d);
@@ -65,13 +75,14 @@ int main(int argc, char *argv[]){
         int r;
         for (int k = 0; k < d->totpsize[i]; k++)
         {
-            if (d->file[d->nrpsize[i][k]].pal1!=-1 && d->file[d->nrpsize[i][k]].sols!=NULL)
+            
+            if (d->file[d->nrpsize[i][k]].pal1!=-1 && d->file[d->nrpsize[i][k]].sols!=NULL) //verificar se o problema ja foi resolvido em sanity check
             {
                 continue;
             }
             
             int aux=d->file[d->nrpsize[i][k]].pal2;
-            for (int l = 0; l < gi->nv; l++)
+            for (int l = 0; l < gi->nv; l++)    //inicializar fakenodes
             {
                 fn[l].from=-1;
                 fn[l].visited=0;
@@ -89,7 +100,7 @@ int main(int argc, char *argv[]){
                 freegraph(gi);
                 exit(EXIT_FAILURE); 
             }
-            else if(r==0){
+            else if(r==0){  //problema sem solucao
                 d->file[d->nrpsize[i][k]].p=-1;
                 d->file[d->nrpsize[i][k]].sols=(sol*)malloc(sizeof(sol));
                 if (d->file[d->nrpsize[i][k]].sols==NULL)
@@ -105,7 +116,7 @@ int main(int argc, char *argv[]){
                 d->file[d->nrpsize[i][k]].sols->w = d->file[d->nrpsize[i][k]].pal2;
                 d->file[d->nrpsize[i][k]].sols->next=NULL;
             }
-            else if(r==1)
+            else if(r==1) //problema com solucao. criacao de lista com as solucoes em d->file[d->nrpsize[i][k]].sols
             {
                 d->file[d->nrpsize[i][k]].p=fn[aux].w;
                 sol* temp1;
@@ -152,8 +163,8 @@ int main(int argc, char *argv[]){
                 }
             }
         }
-        free(fn);
-        freegraph(gi);
+        free(fn); //eliminar fakenodes
+        freegraph(gi); //eliminar grafo
     }
     printprob(d,dict,ofp);
     freedata(d);
@@ -163,6 +174,7 @@ int main(int argc, char *argv[]){
     return 0;
 }
 
+//verificar letras diferentes de 2 palavras. sair quando ultrapassa a mutacao maxima
 int verifdif(char* w1, char* w2,int d){
     int dif=0;
     int s=strlen(w1);
@@ -180,19 +192,21 @@ int verifdif(char* w1, char* w2,int d){
     return (dif);
 }
 
+//verificar se vale a pena criar grafo ou correr problemas no grafo de modo a poupar tempo de execucao
 int sanity_check(probdata* d, int s,sdict* dict){
 
     int necgrafo=0;
     for (int i = 0; i < d->totpsize[s]; i++)
     {
         d->file[d->nrpsize[s][i]].p=0;
+        //casos em que as palavras sao iguais ou mutacao=0 e palavras sao iguais
         if ((d->file[d->nrpsize[s][i]].mod==0 && d->file[d->nrpsize[s][i]].pal1==d->file[d->nrpsize[s][i]].pal2) || (d->file[d->nrpsize[s][i]].pal1==d->file[d->nrpsize[s][i]].pal2))
         {
             
             /*colocar como solucao o proprio problema*/
             d->file[d->nrpsize[s][i]].sols=(sol*)malloc(sizeof(sol));
             if(d->file[d->nrpsize[s][i]].sols==NULL){
-                exit(EXIT_FAILURE);
+                return -1;
             }       
             d->file[d->nrpsize[s][i]].sols->w=d->file[d->nrpsize[s][i]].pal2;
             d->file[d->nrpsize[s][i]].p=0;
@@ -200,12 +214,18 @@ int sanity_check(probdata* d, int s,sdict* dict){
             necgrafo++;
             continue;
         }
+        //casos em que mutacao=0 e palavras sao diferentes
         else if((d->file[d->nrpsize[s][i]].mod==0 && d->file[d->nrpsize[s][i]].pal1!=d->file[d->nrpsize[s][i]].pal2)){
             d->file[d->nrpsize[s][i]].p=-1;
-            d->file[d->nrpsize[s][i]].sols=NULL;
+            d->file[d->nrpsize[s][i]].sols=(sol*)malloc(sizeof(sol));
+            if(d->file[d->nrpsize[s][i]].sols==NULL){
+                return -1;
+            } 
+            d->file[d->nrpsize[s][i]].sols->next=NULL;
+            d->file[d->nrpsize[s][i]].sols->w=d->file[d->nrpsize[s][i]].pal2;
             necgrafo++;
         }
-        else
+        else //casos em que as palavras diferem apenas numa letra 
         {
             int difs=0;
             char* w1=retwadd(dict,s+2,d->file[d->nrpsize[s][i]].pal1);
@@ -221,6 +241,9 @@ int sanity_check(probdata* d, int s,sdict* dict){
                 necgrafo++;
                 /*colocar como solucao o proprio problema e custo 1*/
                 d->file[d->nrpsize[s][i]].sols=(sol*)malloc(sizeof(sol));
+                if(d->file[d->nrpsize[s][i]].sols==NULL){
+                    return -1;
+                } 
                 d->file[d->nrpsize[s][i]].sols->w=d->file[d->nrpsize[s][i]].pal2;
                 d->file[d->nrpsize[s][i]].p=1;
                 d->file[d->nrpsize[s][i]].sols->next=NULL;
@@ -228,7 +251,7 @@ int sanity_check(probdata* d, int s,sdict* dict){
         
         }
     }
-    if(necgrafo==d->totpsize[s]){
+    if(necgrafo==d->totpsize[s]){   //se os problemas resolvidos aqui forem iguais ao total de problemas deste tamanho retornar 0 p/ nao criar grafo
         return 0;
     }
     return 1;
