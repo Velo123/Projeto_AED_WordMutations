@@ -95,8 +95,7 @@ int dijkstra(graph *g, int s,heapnode* fn,int max,int d)
             v=temp->v;
             c=temp->w;
             for (t = g->g[v]; t != NULL; t = t->next)
-            {   
-                //if (temp->visited==1 || t->w>max){continue;}
+            { 
                 if (fn[t->v].visited==1 || t->w>max){continue;}
                 if (fn[t->v].w==maxWT)
                 {

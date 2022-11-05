@@ -90,7 +90,6 @@ int partition(char** a, int l, int r)
     int i, j;
     char* v;
     v = a[r];
-    //v = med3(a,l,r);
     i = l-1; j = r;
     for (;;) {
         while (less(a[++i], v));

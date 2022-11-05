@@ -37,9 +37,6 @@ probdata* scinput(FILE *probptr,sdict *dict){
                 {
                     maxmut[s1-2]=mut;
                 }
-                else if(dif<mut && mut>maxmut[s1-2]){
-                    maxmut[s1-2]=dif;
-                }
             }
         }
     }
@@ -204,7 +201,6 @@ void printprob(probdata* d,sdict* dict,FILE* ofp){
                 aux=aux->next;
                 free(ftemp);
             }
-            fprintf(ofp,"%s\n",retwadd(dict,d->file[i].s,d->file[i].pal2));
         }
         fprintf(ofp,"\n");   
     }
@@ -235,5 +231,20 @@ void freedata(probdata* d){
     free(d->maxmut);
     free(d->totpsize);
     free(d);
+    return;
+}
+void printinputs(sdict*dict,probdata* d){
+    for (int i = 0; i < d->totprobs; i++)
+    {   
+        if (d->file[i].pal1==-1 || d->file[i].pal2==-1 || d->file[i].mod<0)
+        {
+            printf("%s %s\n",d->fv[d->file[i].mod].pal1,d->fv[d->file[i].mod].pal2);
+        }
+        else
+        {
+            printf("%s %s %d\n",retwadd(dict,d->file[i].s,d->file[i].pal1),retwadd(dict,d->file[i].s,d->file[i].pal2),d->file[i].mod);
+            
+        }  
+    }
     return;
 }

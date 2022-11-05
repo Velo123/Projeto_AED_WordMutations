@@ -16,7 +16,6 @@ typedef struct _sol{
 typedef struct failproblem{
     char* pal1;
     char* pal2;
-    //int mod;
 }pfail;
 
 typedef struct problem{
@@ -43,5 +42,6 @@ typedef struct probdata{
 probdata* scinput(FILE *probptr,sdict *dict);
 void printprob(probdata* d,sdict* dict,FILE* ofp);
 void freedata(probdata* d);
+void printinputs(sdict*dict,probdata* d);
 
 #endif

@@ -145,11 +145,7 @@ void sdfree(sdict *dict){
 }*/
 
 char *retwadd(sdict *dict,int tam,int pos){
-    //if (tam<=dict->max_size && pos<dict->tam[tam-2])
-    //{
-        return dict->dict[tam-2][pos];
-    //}
-    //return NULL;
+    return dict->dict[tam-2][pos];
 }
 
 int getwpos(sdict *dict,char *pal){

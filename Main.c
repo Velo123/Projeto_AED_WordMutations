@@ -109,9 +109,8 @@ int main(int argc, char *argv[]){
                     exit(EXIT_FAILURE);
                 }
                 
-                d->file[d->nrpsize[i][k]].sols->w =fn[aux].from;
+                d->file[d->nrpsize[i][k]].sols->w = d->file[d->nrpsize[i][k]].pal2;
                 d->file[d->nrpsize[i][k]].sols->next=NULL;
-                aux=fn[aux].from;
                 while (fn[fn[aux].from].from!=-1)
                 {
                     temp1=(sol*)malloc(sizeof(sol));
@@ -177,17 +176,22 @@ int sanity_check(probdata* d, int s,sdict* dict){
         d->file[d->nrpsize[s][i]].p=0;
         if ((d->file[d->nrpsize[s][i]].mod==0 && d->file[d->nrpsize[s][i]].pal1==d->file[d->nrpsize[s][i]].pal2) || (d->file[d->nrpsize[s][i]].pal1==d->file[d->nrpsize[s][i]].pal2))
         {
+            
             /*colocar como solucao o proprio problema*/
             d->file[d->nrpsize[s][i]].sols=(sol*)malloc(sizeof(sol));
             if(d->file[d->nrpsize[s][i]].sols==NULL){
                 exit(EXIT_FAILURE);
-                //return NULL;
             }       
             d->file[d->nrpsize[s][i]].sols->w=d->file[d->nrpsize[s][i]].pal2;
             d->file[d->nrpsize[s][i]].p=0;
             d->file[d->nrpsize[s][i]].sols->next=NULL;
             necgrafo++;
             continue;
+        }
+        else if((d->file[d->nrpsize[s][i]].mod==0 && d->file[d->nrpsize[s][i]].pal1!=d->file[d->nrpsize[s][i]].pal2)){
+            d->file[d->nrpsize[s][i]].p=-1;
+            d->file[d->nrpsize[s][i]].sols=NULL;
+            necgrafo++;
         }
         else
         {
