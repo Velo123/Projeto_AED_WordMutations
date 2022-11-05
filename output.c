@@ -1,5 +1,6 @@
 #include  "output.h"
 
+//criar ficheiro de output
 FILE *openfile(char *argv[]){
     char *fout=(char*)malloc((strlen(argv[2])+2)*sizeof(char));
     if (fout==NULL)

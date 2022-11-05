@@ -82,7 +82,7 @@ heapnode* pop(heap* h){
 }
 
 
-//verificar
+//arrnjar fila de cima para baixo
 void fixdown(heap* h,int k){
     int idxc;
     while ((2*k+1)<h->n_elements){
@@ -110,12 +110,15 @@ void fixdown(heap* h,int k){
     }   
 }
 
+//limpar fila
 void clearfila(heap* h){
     while (h->n_elements!=0)
     {
         pop(h);
     }
 }
+
+//libertar fila
 void ffreefila(heap* h){
     free(h->hn);
     free(h->heappos);
