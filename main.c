@@ -91,7 +91,19 @@ int main(int argc, char *argv[]){
             }
             else if(r==0){
                 d->file[d->nrpsize[i][k]].p=-1;
-                d->file[d->nrpsize[i][k]].sols=NULL;
+                d->file[d->nrpsize[i][k]].sols=(sol*)malloc(sizeof(sol));
+                if (d->file[d->nrpsize[i][k]].sols==NULL)
+                {
+                    free(fn);
+                    freegraph(gi);
+                    freedata(d);
+                    fclose(ifp);
+                    fclose(ofp);
+                    sdfree(dict);
+                    exit(EXIT_FAILURE);
+                }
+                d->file[d->nrpsize[i][k]].sols->w = d->file[d->nrpsize[i][k]].pal2;
+                d->file[d->nrpsize[i][k]].sols->next=NULL;
             }
             else if(r==1)
             {
