@@ -72,7 +72,7 @@ int getw(edge* e){
 
 int dijkstra(graph *g, int s,heapnode* fn,int max,int d)
 {
-    int v, w; 
+    int v; 
     edge* t;
 
     heap* h=iniheap(g->nv);
