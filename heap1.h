@@ -9,18 +9,18 @@ typedef struct _heapnode heapnode;
 
 struct _heapnode
 {
-    int v;
-    int w;
-    int from;
-    int visited;
+    int v;  //vertice atual
+    int w;  //peso total ate este vertice
+    int from;   //vertice anterior
+    int visited;    //se ja foi visitado
 };
 
 
 struct _heap {
-    int n_elements;
-    int cap;
-    int* heappos;
-    heapnode** hn;
+    int n_elements; //numero de elementos atualmente na fila
+    int cap;    //capacidade maxima da fila - neste caso sera o nr de vertices
+    int* heappos;   //posicao do vertice na fila
+    heapnode** hn;  //vetor de ponteiros para os elementos da fila - ou seja, fila propriamente dita
 };
 void ffreefila(heap* h);
 heap* iniheap(int size);

@@ -13,29 +13,29 @@ typedef struct edges
 
 //funcao para criar grafo
 graph* creategraph(int graphsize){
-    graph* g=(graph*)malloc(sizeof(graph));
-    g->g=(edge**)calloc(graphsize,sizeof(edge*));
-    g->nv=graphsize;
+    graph* g=(graph*)malloc(sizeof(graph));     //alocar memoria para grafo
+    g->g=(edge**)calloc(graphsize,sizeof(edge*));   //alocar memoria para lista de adjacencias
+    g->nv=graphsize;    //guardar numero de vertices
     
-    return g;
+    return g;   //retornar grafo
 }
 
 //funcao para adicionar aresta
 void addedge(edge** gp,int pos,int w,int v){
     edge* temp;
-    if(gp[pos]==NULL){
-        gp[pos]=(edge*)malloc(sizeof(edge));
-        gp[pos]->w=w;
-        gp[pos]->v=v;
-        gp[pos]->next=NULL;
+    if(gp[pos]==NULL){  //se a lista de adjacencias estiver vazia
+        gp[pos]=(edge*)malloc(sizeof(edge));    //alocar memoria para aresta
+        gp[pos]->w=w;   //guardar peso
+        gp[pos]->v=v;   //guardar vertice
+        gp[pos]->next=NULL; //guardar ponteiro para proximo elemento
     }
-    else
+    else    //se a lista de adjacencias nao estiver vazia - adicionar aresta no inicio da lista
     {
-        temp=gp[pos];
-        gp[pos]=(edge*)malloc(sizeof(edge));
-        gp[pos]->w=w;
-        gp[pos]->v=v;
-        gp[pos]->next=temp;
+        temp=gp[pos];   //guardar cabeca de lista
+        gp[pos]=(edge*)malloc(sizeof(edge));    //alocar memoria para aresta
+        gp[pos]->w=w;   //guardar peso
+        gp[pos]->v=v;   //guardar vertice
+        gp[pos]->next=temp; //guardar ponteiro para proximo elemento
     }
     
 }
@@ -87,44 +87,45 @@ int dijkstra(graph *g, int s,heapnode* fn,int max,int d)
         return -1;
     }
     
-    heapnode* temp;
+    heapnode* temp; //guardar elemento retirado da heap temporariamente
 
-    fn[s].w=0;
+    fn[s].w=0;  //inicializar custo de partida
     heapinsert(h,&fn[s]); //colocar na heap elemento de partida
     int c;
-    while (h->n_elements!=0)
+    while (h->n_elements!=0)    //enquanto a heap nao estiver vazia
     {
         temp=pop(h); //retirar elemento prioritario
         
-        if (temp->w != maxWT)
+        if (temp->w != maxWT)   //so o elemento retirado da heap se nao tiver sido visitado
         {
-            v=temp->v;
-            c=temp->w;
-            for (t = g->g[v]; t != NULL; t = t->next)
+            v=temp->v;  //guardar vertice de onde veio
+            c=temp->w;  //guardar custo de onde veio
+            for (t = g->g[v]; t != NULL; t = t->next)   //percorrer lista de adjacencias do vertice retirado da heap
             { 
                 if (fn[t->v].visited==1 || t->w>max){continue;} //verificar se vertice da aresta ja foi visitado. se ja, nao colocar na fila
                 if (fn[t->v].w==maxWT)  //ainda nao foi visitado: atualizar o custo e colocar na fila p/ ser visitado
                 {
-                    fn[t->v].w=(t->w)*(t->w)+c;
-                    fn[t->v].from=v;
-                    heapinsert(h,&fn[t->v]);
+                    fn[t->v].w=(t->w)*(t->w)+c; //atualizar custo
+                    fn[t->v].from=v;    //atualizar de onde veio
+                    heapinsert(h,&fn[t->v]);    //colocar na fila p/ ser visitado
                 }
                 
                 else if (fn[t->v].w > (t->w)*(t->w)+c)  //encontrado novo custo menor para t->v: atualizar de onde vem e quanto custa e atulizar a sua prioridade na fila
                 {
-                    fn[t->v].w=(t->w)*(t->w)+c;
-                    fn[t->v].from=v;
-                    fixup(h,t->v);
+                    fn[t->v].w=(t->w)*(t->w)+c; //atualizar custo
+                    fn[t->v].from=v;    //atualizar de onde veio
+                    fixup(h,t->v);  //atualizar prioridade na fila
                 }
             }
             temp->visited=1;    //colocar vertice como visitado
             if (v==d)   //assim que chega ao vertice de destino: libertar memoria de fila e retornar 1
             {
-                ffreefila(h);
+                ffreefila(h);   //libertar memoria de fila
                 return 1;
             }
         }
     }
-    ffreefila(h);
+    //se chegar aqui: caminho inexistente
+    ffreefila(h);   //libertar memoria de fila
     return 0;   //retornar 0: caminho inexistente
 }

@@ -13,8 +13,8 @@ typedef struct edges edge;
 
 typedef struct _graph
 {
-    edge** g;
-    int nv;
+    edge** g;   //lista de adjacencias
+    int nv; //numero de vertices
     
 }graph;
 

@@ -19,22 +19,22 @@ typedef struct failproblem{
 }pfail;
 
 typedef struct problem{
-    int pal1;
-    int pal2;
-    int mod;
-    int s;
-    int p;
-    sol* sols;
+    int pal1;   //index of pal1 in dict
+    int pal2;   //index of pal2 in dict
+    int mod;    //number of mutations
+    int s;  //size of the word
+    int p;  //number of the problem
+    sol* sols;  //list of solutions
 }prob;
 
 typedef struct probdata{
-    int** nrpsize;
-    int* totpsize;
-    int* maxmut;
-    int maxwsize;
-    int totprobs;
-    pfail* fv;
-    prob* file;
+    int** nrpsize;     //index of a problem on file vector
+    int* totpsize;  //total number of problems of size i
+    int* maxmut;    //max number of mutations of size i
+    int maxwsize;   //max word size
+    int totprobs;   //total number of problems
+    pfail* fv;  //badly defined problems
+    prob* file; //problems
 }probdata;
 
 

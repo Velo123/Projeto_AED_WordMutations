@@ -14,30 +14,31 @@ probdata* scinput(FILE *probptr,sdict *dict){
     while(!feof(probptr)){  //ciclo para ver quanta memoria alocar
         if(fscanf(probptr,"%s %s %d\n",temp1,temp2,&mut)==3){
             totalprobs++;
+            //verificar se os problemas sao validos
             if((s1=strlen(temp1))!=(s2=strlen(temp2)) || (t1=getwpos(dict,temp1))==-1 || (t2=getwpos(dict,temp2))==-1 || mut<0){
                 fails++;
                 totalprobspsize[s1-2]--;
             }
-            totalprobspsize[s1-2]++;
-            if (s1>maxwsize)
+            totalprobspsize[s1-2]++;    //guardar o numero de problemas de cada tamanho
+            if (s1>maxwsize)    //guardar o tamanho maximo de palavra
             {
                 maxwsize=s1;
             }
             if (s1==s2)
             {   //testes para casos em que a mutacao maxima e maior que a palavra gerir qual sera verdadeiramente a mutacao maxima
                 dif=0;
-                for (int i = 0; i < s1; i++)
+                for (int i = 0; i < s1; i++)    //verificar diferenca entre as palavras
                 {
                     if (temp1[i]!=temp2[i])
                     {
                         dif++;
                     }
                 }    
-                if(dif>=mut && mut>maxmut[s1-2])
+                if(dif>=mut && mut>maxmut[s1-2])    //verificar qual a maior mutacao maxima
                 {
                     maxmut[s1-2]=mut;
                 }
-                else if (mut>dif && dif>maxmut[s1-2])
+                else if (mut>dif && dif>maxmut[s1-2])   //verificar qual a maior mutacao maxima
                 {
                     maxmut[s1-2]=dif;
                 }
@@ -127,20 +128,20 @@ probdata* scinput(FILE *probptr,sdict *dict){
     while(!feof(probptr)){  //ciclo para guardar os dados
         if(fscanf(probptr,"%s %s %d\n",temp1,temp2,&mut)==3){
             if((s1=strlen(temp1))==(s2=strlen(temp2)) && (t1=getwpos(dict,temp1))!=-1 && (t2=getwpos(dict,temp2))!=-1 && mut>=0){ //se o problema estiver bem definido atribui tudo normalmente
-                data->file[cntp].pal1=t1;
-                data->file[cntp].pal2=t2;
-                data->file[cntp].mod=mut;
-                data->file[cntp].s=s1;
-                data->nrpsize[s1-2][--totalprobspsize[s1-2]]=cntp;
-                data->file[cntp].sols=NULL;
-                cntp++;       
+                data->file[cntp].pal1=t1;   //guarda a posicao das palavras no dicionario
+                data->file[cntp].pal2=t2;   //guarda a posicao das palavras no dicionario
+                data->file[cntp].mod=mut;   //guarda a mutacao maxima
+                data->file[cntp].s=s1;  //guarda o tamanho das do problema
+                data->nrpsize[s1-2][--totalprobspsize[s1-2]]=cntp;  //guarda a posicao do problema no vetor file
+                data->file[cntp].sols=NULL; //inicializa o vetor de solucoes
+                cntp++;       //incrementa o contador de problemas
             }else{ //se o problema estiver mal definido: alocar espaco para as palavras do problema e colocar em fv, file[cntp].mod guarda a posicao do problema em fv 
-                data->file[cntp].pal1=-1;
-                data->file[cntp].pal2=-1;
-                data->file[cntp].mod=cntf;
-                data->file[cntp].s=-1;
-                data->file[cntp].sols=NULL;
-                data->fv[cntf].pal1=(char*)malloc((s1+1)*sizeof(char));
+                data->file[cntp].pal1=-1;   //se estiver mal definido guarda -1
+                data->file[cntp].pal2=-1;   //se estiver mal definido guarda -1
+                data->file[cntp].mod=cntf;  //guarda a posicao do problema em fv(vetor de problemas mal definidos)
+                data->file[cntp].s=-1;  //guarda -1 por estar mal definido
+                data->file[cntp].sols=NULL; //inicializa o vetor de solucoes a NULL - nao sera utilizado
+                data->fv[cntf].pal1=(char*)malloc((s1+1)*sizeof(char)); //aloca espaco para as palavras do problema(pq nao existem no dicionario)
                 if (data->fv[cntf].pal1==NULL)
                 {
                     if (fails!=0)
@@ -158,7 +159,7 @@ probdata* scinput(FILE *probptr,sdict *dict){
                     free(data);
                     return NULL;
                 }
-                data->fv[cntf].pal2=(char*)malloc((s2+1)*sizeof(char));
+                data->fv[cntf].pal2=(char*)malloc((s2+1)*sizeof(char)); //aloca espaco para as palavras do problema(pq nao existem no dicionario)
                 if (data->fv[cntf].pal2==NULL)
                 {
                     free(data->fv[cntf].pal1);
@@ -177,14 +178,14 @@ probdata* scinput(FILE *probptr,sdict *dict){
                     free(data);
                     return NULL;
                 }
-                strcpy(data->fv[cntf].pal1,temp1);
-                strcpy(data->fv[cntf].pal2,temp2);
-                cntp++;
-                cntf++;
+                strcpy(data->fv[cntf].pal1,temp1);  //copia as palavras para o vetor de problemas mal definidos
+                strcpy(data->fv[cntf].pal2,temp2);  //copia as palavras para o vetor de problemas mal definidos
+                cntp++; //incrementa o contador de problemas
+                cntf++; //incrementa o contador de problemas mal definidos
             }
         }
     }
-    return data;
+    return data;    //retorna o ponteiro para a estrutura
 }
 
 //printar solucoes. percorre e printa as palavras na lista guardada em d->file[i].sols
@@ -199,7 +200,7 @@ void printprob(probdata* d,sdict* dict,FILE* ofp){
         else
         {
             fprintf(ofp,"%s %d\n",retwadd(dict,d->file[i].s,d->file[i].pal1),d->file[i].p);
-            sol* ftemp;
+            /*sol* ftemp;
             aux=d->file[i].sols;
             while (aux!=NULL)
             {
@@ -207,7 +208,7 @@ void printprob(probdata* d,sdict* dict,FILE* ofp){
                 fprintf(ofp,"%s\n",retwadd(dict,d->file[i].s,aux->w));
                 aux=aux->next;
                 free(ftemp);
-            }
+            }*/
         }
         fprintf(ofp,"\n");   
     }
@@ -246,13 +247,13 @@ void freedata(probdata* d){
 void printinputs(sdict*dict,probdata* d){
     for (int i = 0; i < d->totprobs; i++)
     {   
-        if (d->file[i].pal1==-1 || d->file[i].pal2==-1 || d->file[i].mod<0)
+        if (d->file[i].pal1==-1 || d->file[i].pal2==-1 || d->file[i].mod<0) //se o problema estiver mal definido
         {
-            printf("%s %s\n",d->fv[d->file[i].mod].pal1,d->fv[d->file[i].mod].pal2);
+            printf("%s %s\n",d->fv[d->file[i].mod].pal1,d->fv[d->file[i].mod].pal2);    //printa as palavras do problema mal definido
         }
-        else
+        else    //se o problema estiver bem definido
         {
-            printf("%s %s %d\n",retwadd(dict,d->file[i].s,d->file[i].pal1),retwadd(dict,d->file[i].s,d->file[i].pal2),d->file[i].mod);
+            printf("%s %s %d\n",retwadd(dict,d->file[i].s,d->file[i].pal1),retwadd(dict,d->file[i].s,d->file[i].pal2),d->file[i].mod);  //printa as palavras do problema bem definido e o numero de mutacoes
             
         }  
     }
